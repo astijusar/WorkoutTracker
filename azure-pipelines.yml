@@ -1,0 +1,51 @@
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  apiProject: '**/API.csproj'
+  solution: '**/API.sln'
+
+pool:
+  vmImage: 'ubuntu-latest'
+  
+steps:
+  - task: NuGetToolInstaller@1
+    name: 'NuGetToolInstaller'
+    displayName: 'NuGet Tool Installer'
+
+  - task: NuGetCommand@2
+    name: 'NuGetRestore'
+    displayName: 'NuGet Restore Packages'
+    inputs:
+      command: 'restore'
+      restoreSolution: '$(solution)'
+      feedsToUse: 'select'
+      
+  - task: DotNetCoreCLI@2
+    name: 'Tests'
+    displayName: 'Run Tests'
+    inputs:
+      command: 'test'
+      projects: '$(solution)'
+      arguments: '--configuration Release'
+
+  - task: DotNetCoreCLI@2
+    name: 'Publish'
+    displayName: 'Publish'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: '$(apiProject)'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory))'
+      zipAfterPublish: false
+      
+  - task: PublishBuildArtifacts@1
+    name: 'PublishBuildArtifacts'
+    displayName: 'Publish Build Artifacts'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'WorkoutTracker'
+      publishLocation: 'Container'
+      
