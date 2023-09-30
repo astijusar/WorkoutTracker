@@ -1,15 +1,8 @@
-using API.Models;
-using Microsoft.EntityFrameworkCore;
+using API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration["ConnectionStrings:Database"];
-
-builder.Services.AddDbContext<ApplicationContext>(opt =>
-{
-    opt.UseSqlServer(connectionString);
-    opt.EnableDetailedErrors();
-});
+builder.Services.ConfigureSqlContext(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -17,7 +10,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
