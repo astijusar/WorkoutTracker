@@ -6,6 +6,7 @@ namespace API.Controllers
     [ApiController]
     public class WorkoutController : ControllerBase
     {
+        [HttpGet]
         public IActionResult GetWorkouts()
         {
             return Ok();

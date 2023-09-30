@@ -1,4 +1,6 @@
 ﻿using API.Models;
+using API.Repository;
+using API.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions
@@ -14,6 +16,11 @@ namespace API.Extensions
                 opt.UseSqlServer(connectionString);
                 opt.EnableDetailedErrors();
             });
+        }
+
+        public static void ConfigureRepositoryManger(this IServiceCollection services)
+        {
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
     }
 }
