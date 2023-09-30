@@ -1,4 +1,6 @@
+using System.Text.Json.Serialization;
 using API.Extensions;
+using API.Models.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +8,8 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 
 builder.Services.ConfigureRepositoryManger();
 
-builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.ConfigureControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
