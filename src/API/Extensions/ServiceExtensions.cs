@@ -1,8 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Reflection;
+using System.Text.Json.Serialization;
+using API.Filters;
 using API.Models;
 using API.Repository;
 using API.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace API.Extensions
 {
@@ -32,6 +35,22 @@ namespace API.Extensions
                     var enumConverter = new JsonStringEnumConverter();
                     opt.JsonSerializerOptions.Converters.Add(enumConverter);
                 });
+        }
+
+        public static void ConfigureFilters(this IServiceCollection services)
+        {
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped<ExerciseExistsValidationFilterAttribute>();
+        }
+
+        public static void ConfigureSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(s =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                s.IncludeXmlComments(xmlPath);
+            });
         }
     }
 }
