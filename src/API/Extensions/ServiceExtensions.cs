@@ -29,7 +29,9 @@ namespace API.Extensions
 
         public static void ConfigureControllers(this IServiceCollection services)
         {
+            // TODO: configure enum converter for newtonsoft json
             services.AddControllers()
+                .AddNewtonsoftJson()
                 .AddJsonOptions(opt =>
                 {
                     var enumConverter = new JsonStringEnumConverter();

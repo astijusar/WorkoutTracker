@@ -3,6 +3,7 @@ using API.Models;
 using API.Models.DTOs.Exercise;
 using API.Repository.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -112,6 +113,52 @@ namespace API.Controllers
             var exercise = HttpContext.Items["exercise"] as Exercise;
 
             _mapper.Map(input, exercise);
+            await _repository.SaveAsync();
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Partially update exercise by id
+        /// </summary>
+        /// <param name="exerciseId">Exercise to be updated id</param>
+        /// <param name="patchInput">Exercise patch object</param>
+        /// <returns>204 no content response</returns>
+        /// <response code="204">No content response</response>
+        /// <response code="400">Exercise patch object is null</response>
+        /// <response code="422">Invalid model state for the exercise patch object</response>
+        /// <response code="404">Exercise is not found</response>
+        [HttpPatch("{exerciseId:guid}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(422)]
+        [ProducesResponseType(404)]
+        [ServiceFilter(typeof(ExerciseExistsValidationFilterAttribute))]
+        public async Task<IActionResult> PartiallyUpdateExercise(Guid exerciseId,
+            [FromBody] JsonPatchDocument<ExerciseUpdateDto> patchInput)
+        {
+            if (patchInput == null)
+            {
+                _logger.LogWarning("Exercise patch object is null.");
+                return BadRequest("Exercise patch object is null");
+            }
+
+            var exercise = HttpContext.Items["exercise"] as Exercise;
+
+            var exerciseToPatch = _mapper.Map<ExerciseUpdateDto>(exercise);
+
+            patchInput.ApplyTo(exerciseToPatch);
+
+            TryValidateModel(exerciseToPatch);
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for the exercise patch object.");
+                return UnprocessableEntity(ModelState);
+            }
+
+            _mapper.Map(exerciseToPatch, exercise);
+
             await _repository.SaveAsync();
 
             return NoContent();
