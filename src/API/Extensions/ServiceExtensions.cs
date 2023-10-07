@@ -6,6 +6,7 @@ using API.Repository;
 using API.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Converters;
 
 namespace API.Extensions
 {
@@ -31,12 +32,8 @@ namespace API.Extensions
         {
             // TODO: configure enum converter for newtonsoft json
             services.AddControllers()
-                .AddNewtonsoftJson()
-                .AddJsonOptions(opt =>
-                {
-                    var enumConverter = new JsonStringEnumConverter();
-                    opt.JsonSerializerOptions.Converters.Add(enumConverter);
-                });
+                .AddNewtonsoftJson(opt => opt
+                    .SerializerSettings.Converters.Add(new StringEnumConverter()));
         }
 
         public static void ConfigureFilters(this IServiceCollection services)
