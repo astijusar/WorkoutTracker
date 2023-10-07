@@ -30,7 +30,6 @@ namespace API.Extensions
 
         public static void ConfigureControllers(this IServiceCollection services)
         {
-            // TODO: configure enum converter for newtonsoft json
             services.AddControllers()
                 .AddNewtonsoftJson(opt => opt
                     .SerializerSettings.Converters.Add(new StringEnumConverter()));
@@ -39,7 +38,8 @@ namespace API.Extensions
         public static void ConfigureFilters(this IServiceCollection services)
         {
             services.AddScoped<ValidationFilterAttribute>();
-            services.AddScoped<ExerciseExistsValidationFilterAttribute>();
+            services.AddScoped<ExerciseExistsFilterAttribute>();
+            services.AddScoped<WorkoutExistsFilterAttribute>();
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)

@@ -97,7 +97,7 @@ namespace API.Controllers
         /// <response code="404">Exercise is not found</response>
         [HttpPut("{exerciseId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(ExerciseExistsValidationFilterAttribute))]
+        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> UpdateExercise(Guid exerciseId, [FromBody] ExerciseUpdateDto input)
         {
             var exercise = HttpContext.Items["exercise"] as Exercise;
@@ -119,7 +119,7 @@ namespace API.Controllers
         /// <response code="422">Invalid model state for the exercise patch object</response>
         /// <response code="404">Exercise is not found</response>
         [HttpPatch("{exerciseId:guid}")]
-        [ServiceFilter(typeof(ExerciseExistsValidationFilterAttribute))]
+        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> PartiallyUpdateExercise(Guid exerciseId,
             [FromBody] JsonPatchDocument<ExerciseUpdateDto> patchInput)
         {
@@ -158,7 +158,7 @@ namespace API.Controllers
         /// <response code="204">No content response</response>
         /// <response code="404">Exercise is not found</response>
         [HttpDelete("{exerciseId:guid}")]
-        [ServiceFilter(typeof(ExerciseExistsValidationFilterAttribute))]
+        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> DeleteExercise(Guid exerciseId)
         {
             var exercise = HttpContext.Items["exercise"] as Exercise;

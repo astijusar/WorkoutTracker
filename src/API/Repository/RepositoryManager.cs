@@ -7,6 +7,7 @@ namespace API.Repository
     {
         private readonly ApplicationContext _repositoryContext;
         private IExerciseRepository? _exerciseRepository;
+        private IWorkoutRepository? _workoutRepository;
 
         public RepositoryManager(ApplicationContext repositoryContext)
         {
@@ -16,6 +17,11 @@ namespace API.Repository
         public IExerciseRepository Exercise
         {
             get { return _exerciseRepository ??= new ExerciseRepository(_repositoryContext); }
+        }
+
+        public IWorkoutRepository Workout
+        {
+            get { return _workoutRepository ??= new WorkoutRepository(_repositoryContext); }
         }
 
         public void Save() => _repositoryContext.SaveChanges();

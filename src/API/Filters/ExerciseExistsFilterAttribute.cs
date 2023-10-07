@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace API.Filters
 {
-    public class ExerciseExistsValidationFilterAttribute : IAsyncActionFilter
+    public class ExerciseExistsFilterAttribute : IAsyncActionFilter
     {
-        private readonly ILogger<ExerciseExistsValidationFilterAttribute> _logger;
+        private readonly ILogger<ExerciseExistsFilterAttribute> _logger;
         private readonly IRepositoryManager _repository;
 
-        public ExerciseExistsValidationFilterAttribute(ILogger<ExerciseExistsValidationFilterAttribute> logger,
+        public ExerciseExistsFilterAttribute(ILogger<ExerciseExistsFilterAttribute> logger,
             IRepositoryManager repository)
         {
             _logger = logger;
@@ -19,8 +19,10 @@ namespace API.Filters
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var method = context.HttpContext.Request.Method;
-            var trackChanges = method.Equals("PUT") || method.Equals("PATCH") ? true : false;
+            var trackChanges = method.Equals("PUT") || method.Equals("PATCH");
             var id = (Guid)context.ActionArguments["exerciseId"]!;
+
+            // TODO: throw exception if id is null
 
             var exercise = await _repository.Exercise.GetExerciseAsync(id, trackChanges);
 
