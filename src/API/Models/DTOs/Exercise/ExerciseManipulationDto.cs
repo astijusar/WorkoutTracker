@@ -7,9 +7,7 @@ namespace API.Models.DTOs.Exercise
         [Required(ErrorMessage = "Name is a required field.")]
         public string Name { get; set; }
 
-
-        [Required(ErrorMessage = "Instructions is a required field.")]
-        public string Instructions { get; set; }
+        public string? Instructions { get; set; }
 
 
         [Required(ErrorMessage = "Muscle group is a required field.")]
