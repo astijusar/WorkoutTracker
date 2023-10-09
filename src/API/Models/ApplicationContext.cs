@@ -20,14 +20,14 @@ namespace API.Models
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Workout>()
-                .HasMany(w => w.WorkoutExercises)
+                .HasMany(w => w.Exercises)
                 .WithOne(e => e.Workout)
                 .HasForeignKey(e => e.WorkoutId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
 
             modelBuilder.Entity<WorkoutExercise>()
-                .HasMany(w => w.WorkoutExerciseSets)
+                .HasMany(w => w.Sets)
                 .WithOne(we => we.WorkoutExercise)
                 .HasForeignKey(we => we.WorkoutExerciseId)
                 .OnDelete(DeleteBehavior.Cascade)

@@ -1,7 +1,13 @@
 using API.Extensions;
 using API.Models.Mapping;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ApiBehaviorOptions>(opt =>
+{
+    opt.SuppressModelStateInvalidFilter = true;
+});
 
 builder.Services.ConfigureSqlContext(builder.Configuration);
 

@@ -11,7 +11,7 @@ namespace API.Repository
         {
         }
 
-        public async Task<IEnumerable<Exercise>> GetAllExercisesAsync(bool trackChanges) =>
+        public async Task<IList<Exercise>> GetAllExercisesAsync(bool trackChanges) =>
             await FindAll(trackChanges)
                 .ToListAsync();
 

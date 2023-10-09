@@ -16,9 +16,7 @@ namespace API.Models
         public string Name { get; set; } = null!;
 
 
-        [Required(ErrorMessage = "Instructions is a required field.")]
-        [Column(TypeName = "text")]
-        public string Instructions { get; set; } = null!;
+        public string? Instructions { get; set; }
 
 
         [Required(ErrorMessage = "Muscle group is a required field.")]

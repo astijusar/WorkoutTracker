@@ -40,6 +40,7 @@ namespace API.Extensions
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ExerciseExistsFilterAttribute>();
             services.AddScoped<WorkoutExistsFilterAttribute>();
+            services.AddScoped<WorkoutExerciseExistsFilterAttribute>();
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)

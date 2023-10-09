@@ -23,6 +23,6 @@ namespace API.Models
         public Exercise Exercise { get; set; } = null!;
 
 
-        public ICollection<WorkoutExerciseSet> WorkoutExerciseSets { get; set; } = null!;
+        public ICollection<WorkoutExerciseSet> Sets { get; set; } = null!;
     }
 }

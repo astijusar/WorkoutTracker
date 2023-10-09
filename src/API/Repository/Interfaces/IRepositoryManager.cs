@@ -6,5 +6,7 @@
         Task SaveAsync();
         IExerciseRepository Exercise { get; }
         IWorkoutRepository Workout { get; }
+        IWorkoutExerciseRepository WorkoutExercise { get; }
+        IWorkoutExerciseSetRepository WorkoutExerciseSet { get; }
     }
 }

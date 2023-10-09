@@ -14,18 +14,17 @@ namespace API.Models
         [MaxLength(60, ErrorMessage = "Maximum length for the Name is 60 characters.")]
         public string Name { get; set; } = null!;
 
-
-        [Required(ErrorMessage = "Note is a required field.")]
-        [MaxLength(200, ErrorMessage = "Maximum length for the Note is 200 characters.")]
-        public string Note { get; set; } = null!;
+        public string? Note { get; set; }
 
         public DateTime? Start { get; set; }
 
         public DateTime? End { get; set; }
 
+
+        [Required(ErrorMessage = "IsTemplate is a required field.")]
         public bool IsTemplate { get; set; }
 
 
-        public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = null!;
+        public ICollection<WorkoutExercise> Exercises { get; set; } = null!;
     }
 }

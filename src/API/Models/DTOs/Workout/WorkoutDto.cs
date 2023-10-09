@@ -1,4 +1,6 @@
-﻿namespace API.Models.DTOs.Workout
+﻿using API.Models.DTOs.WorkoutExercise;
+
+namespace API.Models.DTOs.Workout
 {
     public record WorkoutDto
     {
@@ -8,6 +10,6 @@
         public DateTime? Start { get; set; }
         public DateTime? End { get; set; }
         public bool IsTemplate { get; set; }
-        //public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = null!;
+        public ICollection<WorkoutExerciseDto> WorkoutExercises { get; set; } = null!;
     }
 }
