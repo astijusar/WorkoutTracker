@@ -32,7 +32,7 @@ namespace API.Filters
                 _logger.LogWarning($"Workout with id: {id} doesn't exist in the database.");
                 context.Result = new NotFoundResult();
 
-                await next();
+                return;
             }
 
             context.HttpContext.Items.Add("workout", workout);

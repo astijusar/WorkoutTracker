@@ -31,7 +31,7 @@ namespace API.Filters
                 _logger.LogWarning($"Exercise with id: {id} doesn't exist in the database.");
                 context.Result = new NotFoundResult();
 
-                await next();
+                return;
             }
 
             context.HttpContext.Items.Add("exercise", exercise);

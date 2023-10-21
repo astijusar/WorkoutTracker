@@ -24,6 +24,7 @@ namespace API.Filters
             {
                 _logger.LogWarning($"Object sent from client is null. Controller: {controller}, action: {action}");
                 context.Result = new BadRequestObjectResult($"Object sent from client is null. Controller: {controller}, action: {action}");
+
                 return;
             }
 
