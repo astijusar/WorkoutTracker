@@ -1,6 +1,6 @@
-﻿using API.Repository.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Repository.Interfaces;
 
 namespace API.Filters
 {

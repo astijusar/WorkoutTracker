@@ -1,12 +1,10 @@
 ﻿using System.Reflection;
-using System.Text.Json.Serialization;
 using API.Filters;
-using API.Models;
-using API.Repository;
-using API.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
+using Repository;
+using Repository.Interfaces;
+using Repository.Models;
 
 namespace API.Extensions
 {

@@ -1,10 +1,10 @@
 ﻿using API.Filters;
-using API.Models;
-using API.Models.DTOs.Exercise;
-using API.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Interfaces;
+using Repository.Models;
+using Repository.Models.DTOs.Exercise;
 
 namespace API.Controllers
 {

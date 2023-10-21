@@ -1,6 +1,6 @@
 using API.Extensions;
-using API.Models.Mapping;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Models.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 

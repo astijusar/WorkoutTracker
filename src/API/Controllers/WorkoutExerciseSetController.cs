@@ -1,9 +1,9 @@
 ﻿using API.Filters;
-using API.Models;
-using API.Models.DTOs.WorkoutExerciseSet;
-using API.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Interfaces;
+using Repository.Models;
+using Repository.Models.DTOs.WorkoutExerciseSet;
 
 namespace API.Controllers
 {
