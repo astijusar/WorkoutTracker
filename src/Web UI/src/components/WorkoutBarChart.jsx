@@ -6,9 +6,10 @@ import {
     Title,
     Tooltip,
     Legend,
-  } from 'chart.js';
+} from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
+import moment from "moment";
 
 ChartJS.register(
     CategoryScale,
@@ -19,6 +20,18 @@ ChartJS.register(
     Legend
 );
 
+const generateWeekLabels = () => {
+    const labels = [];
+
+    for (let i = 7; i >= 0; i--) {
+        const week = moment().subtract(i, "weeks").format("MM/D");
+        console.log(week);
+        labels.push(week);
+    }
+
+    return labels;
+};
+
 const options = {
     responsive: true,
     plugins: {
@@ -27,24 +40,40 @@ const options = {
             text: "Workouts per week",
             font: {
                 size: 20,
-            }
+            },
+            color: '#9ca3af'
         },
         legend: {
             display: false,
-        }
+        },
+    },
+    scales: {
+        x: {
+            ticks: {
+                color: '#9ca3af'
+            }
+        },
+        y: {
+            ticks: {
+                beginAtZero: true,
+                stepSize: 1,
+                color: '#9ca3af'
+            },
+        },
     },
 };
 
-const labels = ["1", "2", "3", "4", "5", "6", "7"];
+const weekLabels = generateWeekLabels();
 
 const data = {
-    labels,
+    labels: weekLabels,
     datasets: [
         {
-            data: labels.map(() => Math.floor(Math.random() * 4)),
-        }
+            data: weekLabels.map(() => Math.floor(Math.random() * 6)),
+            backgroundColor: '#606FF6'
+        },
     ],
-}
+};
 
 const WorkoutBarChart = () => {
     const chartRef = useRef(null);
@@ -58,9 +87,7 @@ const WorkoutBarChart = () => {
         }
     }, [data]);
 
-    return (
-        <Bar ref={chartRef} options={options} data={data} />
-    )
-}
+    return <Bar ref={chartRef} options={options} data={data} />;
+};
 
 export default WorkoutBarChart;
