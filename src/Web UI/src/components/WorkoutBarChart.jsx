@@ -24,8 +24,7 @@ const generateWeekLabels = () => {
     const labels = [];
 
     for (let i = 7; i >= 0; i--) {
-        const week = moment().subtract(i, "weeks").format("MM/D");
-        console.log(week);
+        const week = moment().subtract(i, "weeks").startOf('isoWeek').format("MM/D");
         labels.push(week);
     }
 
@@ -41,7 +40,7 @@ const options = {
             font: {
                 size: 20,
             },
-            color: '#9ca3af'
+            color: '#C8CAD0'
         },
         legend: {
             display: false,
