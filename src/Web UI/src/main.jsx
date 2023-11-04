@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import Root from './routes/root.jsx';
 import Profile from './routes/Profile.jsx';
-import Workout from './routes/Workout.jsx';
+import StartWorkout from './routes/StartWorkout.jsx';
 import Exercises from './routes/Exercises.jsx';
 import History from './routes/History.jsx';
 
@@ -26,8 +26,8 @@ const router = createBrowserRouter([
         element: <History />
       },
       {
-        path: "workout",
-        element: <Workout />
+        path: "start-workout",
+        element: <StartWorkout />
       },
       {
         path: "exercises",
