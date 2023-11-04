@@ -69,7 +69,8 @@ const data = {
     datasets: [
         {
             data: weekLabels.map(() => Math.floor(Math.random() * 6)),
-            backgroundColor: '#606FF6'
+            backgroundColor: '#606FF6',
+            borderRadius: 5,
         },
     ],
 };
