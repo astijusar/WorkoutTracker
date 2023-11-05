@@ -9,11 +9,11 @@ using Repository.Models;
 
 #nullable disable
 
-namespace API.Migrations
+namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20231009122030_MakeExerciseInstructionsNullable")]
-    partial class MakeExerciseInstructionsNullable
+    [Migration("20231009095307_MakeNoteNullable")]
+    partial class MakeNoteNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,8 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Instructions")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("MuscleGroup")
                         .HasColumnType("int");

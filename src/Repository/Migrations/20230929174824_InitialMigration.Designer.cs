@@ -9,7 +9,7 @@ using Repository.Models;
 
 #nullable disable
 
-namespace API.Migrations
+namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
     [Migration("20230929174824_InitialMigration")]

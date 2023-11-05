@@ -1,6 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
 using API.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Models.Mapping;
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.ConfigureControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureAuthenticationAndAuthorization(builder.Configuration);
 
 var app = builder.Build();
 
@@ -29,6 +34,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

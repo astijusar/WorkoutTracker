@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace API.Migrations
+namespace Repository.Migrations
 {
     /// <inheritdoc />
     public partial class MakeNoteNullable : Migration

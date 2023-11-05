@@ -1,6 +1,10 @@
 ﻿using System.Reflection;
+using System.Text;
 using API.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
 using Repository;
 using Repository.Interfaces;
@@ -49,6 +53,32 @@ namespace API.Extensions
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 s.IncludeXmlComments(xmlPath);
             });
+        }
+
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
+        }
+
+        public static void ConfigureAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(opt =>
+            {
+                opt.TokenValidationParameters.ValidAudience = configuration["Jwt:ValidAudience"];
+                opt.TokenValidationParameters.ValidIssuer = configuration["Jwt:ValidIssuer"];
+                opt.TokenValidationParameters.IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]));
+            });
+
+            services.AddAuthorization();
         }
     }
 }
