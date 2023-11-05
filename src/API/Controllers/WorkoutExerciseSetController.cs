@@ -7,7 +7,7 @@ using Repository.Models.DTOs.WorkoutExerciseSet;
 
 namespace API.Controllers
 {
-    [Route("api/exercise/{exerciseId}/set")]
+    [Route("api/workout/{workoutId}/exercise/{exerciseId}/set")]
     [ApiController]
     public class WorkoutExerciseSetController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetExerciseSets(Guid exerciseId)
+        public async Task<IActionResult> GetExerciseSets(Guid workoutId, Guid exerciseId)
         {
             var exerciseSets = await _repository.WorkoutExerciseSet.GetExerciseSetsAsync(exerciseId, false);
 
@@ -34,7 +34,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{setId:guid}", Name = "GetExerciseSet")]
-        public async Task<IActionResult> GetExerciseSet(Guid exerciseId, Guid setId)
+        public async Task<IActionResult> GetExerciseSet(Guid workoutId, Guid exerciseId, Guid setId)
         {
             var exerciseSet = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, false);
 
@@ -50,7 +50,7 @@ namespace API.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> CreateExerciseSet(Guid exerciseId, [FromBody] WorkoutExerciseSetCreationDto input)
+        public async Task<IActionResult> CreateExerciseSet(Guid workoutId, Guid exerciseId, [FromBody] WorkoutExerciseSetCreationDto input)
         {
             var exerciseSet = _mapper.Map<WorkoutExerciseSet>(input);
 
@@ -59,12 +59,12 @@ namespace API.Controllers
 
             var exerciseSetDto = _mapper.Map<WorkoutExerciseSetDto>(exerciseSet);
 
-            return CreatedAtRoute("GetExerciseSet", new { exerciseId, setId = exerciseSetDto.Id }, exerciseSetDto);
+            return CreatedAtRoute("GetExerciseSet", new { workoutId, exerciseId, setId = exerciseSetDto.Id }, exerciseSetDto);
         }
 
         [HttpPut("{setId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> UpdateSet(Guid exerciseId, Guid setId,
+        public async Task<IActionResult> UpdateSet(Guid workoutId, Guid exerciseId, Guid setId,
             [FromBody] WorkoutExerciseSetUpdateDto input)
         {
             var exercise = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, true);
@@ -82,7 +82,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{setId:guid}")]
-        public async Task<IActionResult> DeleteExerciseSet(Guid exerciseId, Guid setId)
+        public async Task<IActionResult> DeleteExerciseSet(Guid workoutId, Guid exerciseId, Guid setId)
         {
             var exerciseSet = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, true);
 
