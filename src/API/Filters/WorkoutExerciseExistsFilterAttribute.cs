@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Repository.Interfaces;
 
@@ -19,10 +20,9 @@ namespace API.Filters
         {
             var method = context.HttpContext.Request.Method;
             var trackChanges = (method.Equals("PUT") || method.Equals("PATCH"));
-            var exerciseId = (Guid)context.ActionArguments["exerciseId"]!;
-            var workoutId = (Guid)context.ActionArguments["workoutId"]!;
 
-            // TODO: throw exception if id is null
+            var exerciseId = CheckAndParseGuid(context.ActionArguments["exerciseId"]);
+            var workoutId = CheckAndParseGuid(context.ActionArguments["workoutId"]);
 
             var exercise = await _repository.WorkoutExercise.GetWorkoutExerciseAsync(workoutId, exerciseId, trackChanges);
 
@@ -36,6 +36,22 @@ namespace API.Filters
 
             context.HttpContext.Items.Add("workoutExercise", exercise);
             await next();
+        }
+
+        private Guid CheckAndParseGuid(object? id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id),
+                    $"Argument '{nameof(id)}' is null in the action filter '{nameof(WorkoutExerciseExistsFilterAttribute)}'.");
+            }
+
+            if (!Guid.TryParse(id.ToString(), out var guid))
+            {
+                throw new InvalidGuidException(nameof(id));
+            }
+
+            return guid;
         }
     }
 }

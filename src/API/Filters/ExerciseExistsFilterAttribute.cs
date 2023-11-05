@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Repository.Interfaces;
 
@@ -20,15 +21,24 @@ namespace API.Filters
         {
             var method = context.HttpContext.Request.Method;
             var trackChanges = method.Equals("PUT") || method.Equals("PATCH");
-            var id = (Guid)context.ActionArguments["exerciseId"]!;
+            var id = context.ActionArguments["exerciseId"];
 
-            // TODO: throw exception if id is null
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id),
+                    $"Argument '{nameof(id)}' is null in the action filter '{nameof(ExerciseExistsFilterAttribute)}'.");
+            }
 
-            var exercise = await _repository.Exercise.GetExerciseAsync(id, trackChanges);
+            if (!Guid.TryParse(id.ToString(), out var exerciseId))
+            {
+                throw new InvalidGuidException(nameof(id));
+            }
+
+            var exercise = await _repository.Exercise.GetExerciseAsync(exerciseId, trackChanges);
 
             if (exercise == null)
             {
-                _logger.LogWarning($"Exercise with id: {id} doesn't exist in the database.");
+                _logger.LogWarning($"Exercise with id: {exerciseId} doesn't exist in the database.");
                 context.Result = new NotFoundResult();
 
                 return;
