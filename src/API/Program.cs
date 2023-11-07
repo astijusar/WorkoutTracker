@@ -1,7 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using API.Extensions;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Models.Mapping;
+using Repository.Seeders;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -13,6 +15,8 @@ builder.Services.Configure<ApiBehaviorOptions>(opt =>
 });
 
 builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.AddTransient<JwtTokenService>();
+builder.Services.AddScoped<AuthDbSeeder>();
 
 builder.Services.ConfigureRepositoryManger();
 builder.Services.ConfigureFilters();
@@ -38,5 +42,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await app.SeedDatabase();
 
 app.Run();

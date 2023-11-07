@@ -2,6 +2,7 @@
 
 namespace Repository.Models.DTOs.Exercise
 {
+    // TODO: refactor all records to have init
     public record ExerciseDto
     {
         public Guid Id { get; set; }

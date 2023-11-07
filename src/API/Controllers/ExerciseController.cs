@@ -1,5 +1,6 @@
 ﻿using API.Filters;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
@@ -8,6 +9,7 @@ using Repository.Models.DTOs.Exercise;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ExerciseController : ControllerBase

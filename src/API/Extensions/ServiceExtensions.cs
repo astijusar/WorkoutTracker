@@ -9,6 +9,7 @@ using Newtonsoft.Json.Converters;
 using Repository;
 using Repository.Interfaces;
 using Repository.Models;
+using Repository.Seeders;
 
 namespace API.Extensions
 {
@@ -79,6 +80,14 @@ namespace API.Extensions
             });
 
             services.AddAuthorization();
+        }
+
+        public static async Task SeedDatabase(this WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            var dbSeeder = scope.ServiceProvider.GetRequiredService<AuthDbSeeder>();
+
+            await dbSeeder.SeedAsync();
         }
     }
 }

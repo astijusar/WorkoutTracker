@@ -19,7 +19,7 @@ namespace API.Services
             _audience = configuration["Jwt:ValidAudience"]!;
         }
 
-        public string CreateAccessToken(string userName, string userId, IEnumerable<string> roles)
+        public string CreateAccessToken(string userId, string userName, IEnumerable<string> roles)
         {
             var authClaims = new List<Claim>
             {
