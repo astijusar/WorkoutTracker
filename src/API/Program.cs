@@ -43,6 +43,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await app.SeedDatabase();
+app.SeedDatabase().Wait();
 
 app.Run();
