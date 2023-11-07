@@ -1,9 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using API.Extensions;
+using API.Models.Mapping;
+using API.Repository.Seeders;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
-using Repository.Models.Mapping;
-using Repository.Seeders;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

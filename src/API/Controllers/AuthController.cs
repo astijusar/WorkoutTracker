@@ -1,13 +1,13 @@
 ﻿using System.Security.Claims;
 using API.Filters;
+using API.Models;
+using API.Models.DTOs.JWT;
+using API.Models.DTOs.User;
 using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
-using Repository.Models;
-using Repository.Models.DTOs.JWT;
-using Repository.Models.DTOs.User;
 
 namespace API.Controllers
 {

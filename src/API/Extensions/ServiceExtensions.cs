@@ -1,15 +1,15 @@
 ﻿using System.Reflection;
 using System.Text;
 using API.Filters;
+using API.Models;
+using API.Repository;
+using API.Repository.Interfaces;
+using API.Repository.Seeders;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
-using Repository;
-using Repository.Interfaces;
-using Repository.Models;
-using Repository.Seeders;
 
 namespace API.Extensions
 {
