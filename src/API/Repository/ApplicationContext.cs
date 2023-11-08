@@ -34,6 +34,12 @@ namespace API.Repository
                 .HasForeignKey(we => we.WorkoutExerciseId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Workouts)
+                .WithOne(w => w.User)
+                .HasForeignKey(w => w.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<Exercise> Exercises { get; set; }

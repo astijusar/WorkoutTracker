@@ -25,6 +25,9 @@ namespace API.Models
         public bool IsTemplate { get; set; }
 
 
+        public string UserId { get; set; } = null!;
+        public User User { get; set; } = null!;
+
         public ICollection<WorkoutExercise> Exercises { get; set; } = null!;
     }
 }

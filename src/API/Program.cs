@@ -17,6 +17,7 @@ builder.Services.Configure<ApiBehaviorOptions>(opt =>
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddTransient<JwtTokenService>();
 builder.Services.AddScoped<AuthDbSeeder>();
+builder.Services.AddScoped<DbSeeder>();
 
 builder.Services.ConfigureRepositoryManger();
 builder.Services.ConfigureFilters();
@@ -43,6 +44,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.SeedDatabase().Wait();
+app.RunMigrations();
+await app.SeedDatabase();
 
 app.Run();

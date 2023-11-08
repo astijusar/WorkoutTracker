@@ -17,7 +17,8 @@ namespace API.Extensions
     {
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration["ConnectionStrings:Database"];
+            //var connectionString = configuration["ConnectionStrings:Database"];
+            var connectionString = "Server=127.0.0.1\\mssql,1433;Database=WorkoutTrackerDB;User=sa;Password=/Password12;TrustServerCertificate=Yes";
 
             services.AddDbContext<ApplicationContext>(opt =>
             {
@@ -42,8 +43,9 @@ namespace API.Extensions
         {
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ExerciseExistsFilterAttribute>();
-            services.AddScoped<WorkoutExistsFilterAttribute>();
+            services.AddScoped<WorkoutForUserExistsFilterAttribute>();
             services.AddScoped<WorkoutExerciseExistsFilterAttribute>();
+            services.AddScoped<UserExistsFilterAttribute>();
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)
@@ -85,9 +87,19 @@ namespace API.Extensions
         public static async Task SeedDatabase(this WebApplication app)
         {
             using var scope = app.Services.CreateScope();
-            var dbSeeder = scope.ServiceProvider.GetRequiredService<AuthDbSeeder>();
+            var authDbSeeder = scope.ServiceProvider.GetRequiredService<AuthDbSeeder>();
+            var dbSeeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
 
+            await authDbSeeder.SeedAsync();
             await dbSeeder.SeedAsync();
+        }
+
+        public static void RunMigrations(this WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+
+            dbContext.Database.Migrate();
         }
     }
 }
