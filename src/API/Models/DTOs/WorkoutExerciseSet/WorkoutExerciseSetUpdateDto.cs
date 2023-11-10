@@ -1,4 +1,4 @@
 ﻿namespace API.Models.DTOs.WorkoutExerciseSet
 {
-    public record WorkoutExerciseSetUpdateDto() : WorkoutExerciseSetManipulationDto;
+    public record WorkoutExerciseSetUpdateDto : WorkoutExerciseSetManipulationDto;
 }

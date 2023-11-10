@@ -2,12 +2,5 @@
 
 namespace API.Models.DTOs.WorkoutExerciseSet
 {
-    public record WorkoutExerciseSetDto
-    {
-        public Guid Id { get; set; }
-        public int Reps { get; set; }
-        public decimal Weight { get; set; }
-        public MeasurementType MeasurementType { get; set; }
-        public int Order { get; set; }
-    }
+    public record WorkoutExerciseSetDto(Guid Id, int Reps, decimal Weight, MeasurementType MeasurementType, int Order);
 }

@@ -2,14 +2,6 @@
 
 namespace API.Models.DTOs.Workout
 {
-    public record WorkoutDto
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string Note { get; set; } = null!;
-        public DateTime? Start { get; set; }
-        public DateTime? End { get; set; }
-        public bool IsTemplate { get; set; }
-        public ICollection<WorkoutExerciseDto> WorkoutExercises { get; set; } = null!;
-    }
+    public record WorkoutDto(Guid Id, string Name, string Note, DateTime? Start, DateTime? End, bool IsTemplate,
+        ICollection<WorkoutExerciseDto>? WorkoutExercises);
 }

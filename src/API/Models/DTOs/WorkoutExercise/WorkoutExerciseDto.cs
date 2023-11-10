@@ -3,11 +3,5 @@ using API.Models.DTOs.WorkoutExerciseSet;
 
 namespace API.Models.DTOs.WorkoutExercise
 {
-    public record WorkoutExerciseDto
-    {
-        public Guid Id { get; set; }
-        public int Order { get; set; }
-        public ExerciseDto Exercise { get; set; } = null!;
-        public ICollection<WorkoutExerciseSetDto> Sets { get; set; } = null!;
-    }
+    public record WorkoutExerciseDto(Guid Id, int Order, ExerciseDto Exercise, ICollection<WorkoutExerciseSetDto> Sets);
 }
