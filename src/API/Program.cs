@@ -44,7 +44,14 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.RunMigrations();
-await app.SeedDatabase();
+try
+{
+    app.RunMigrations();
+    await app.SeedDatabase();
+}
+catch (Exception e)
+{
+    app.Logger.LogError($"Database Error: {e.Message}");
+}
 
 app.Run();
