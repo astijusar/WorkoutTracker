@@ -51,7 +51,7 @@ namespace API.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(WorkoutExistsFilterAttribute))]
+        [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
         public async Task<IActionResult> CreateExercise(Guid workoutId, [FromBody] WorkoutExerciseCreationDto input)
         {
             var exercise = _mapper.Map<WorkoutExercise>(input);
@@ -66,7 +66,7 @@ namespace API.Controllers
 
         [HttpPost("collection")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(WorkoutExistsFilterAttribute))]
+        [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
         public async Task<IActionResult> CreateExerciseCollection(Guid workoutId, [FromBody] IEnumerable<WorkoutExerciseCreationDto> input)
         {
             var exercises = _mapper.Map<IEnumerable<WorkoutExercise>>(input);

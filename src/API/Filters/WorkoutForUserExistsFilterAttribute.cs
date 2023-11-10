@@ -1,24 +1,49 @@
-﻿using API.Exceptions;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using API.Exceptions;
+using API.Models;
 using API.Repository.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace API.Filters
 {
-    public class WorkoutExistsFilterAttribute : IAsyncActionFilter
+    public class WorkoutForUserExistsFilterAttribute : IAsyncActionFilter
     {
-        private readonly ILogger<WorkoutExistsFilterAttribute> _logger;
+        private readonly ILogger<WorkoutForUserExistsFilterAttribute> _logger;
         private readonly IRepositoryManager _repository;
+        private readonly UserManager<User> _userManager;
 
-        public WorkoutExistsFilterAttribute(ILogger<WorkoutExistsFilterAttribute> logger,
-            IRepositoryManager repository)
+        public WorkoutForUserExistsFilterAttribute(ILogger<WorkoutForUserExistsFilterAttribute> logger,
+            IRepositoryManager repository, UserManager<User> userManager)
         {
             _logger = logger;
             _repository = repository;
+            _userManager = userManager;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var userId = context.HttpContext.User
+                .FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                context.Result = new UnauthorizedResult();
+                return;
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                context.Result = new NotFoundResult();
+                return;
+            }
+
+            context.HttpContext.Items.Add("user", user);
+
             var method = context.HttpContext.Request.Method;
             var trackChanges = method.Equals("PUT") || method.Equals("PATCH");
             var id = context.ActionArguments["workoutId"];
@@ -34,7 +59,7 @@ namespace API.Filters
                 throw new InvalidGuidException(nameof(id));
             }
 
-            var workout = await _repository.Workout.GetWorkoutAsync(workoutId, trackChanges);
+            var workout = await _repository.Workout.GetWorkoutAsync(userId, workoutId, trackChanges);
 
             if (workout == null)
             {

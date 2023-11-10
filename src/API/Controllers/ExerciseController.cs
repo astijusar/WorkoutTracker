@@ -1,6 +1,7 @@
 ﻿using API.Filters;
 using API.Models;
 using API.Models.DTOs.Exercise;
+using API.Models.RequestFeatures;
 using API.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -31,13 +32,13 @@ namespace API.Controllers
         /// <returns>A list of all exercises</returns>
         /// <response code="200">Returns a list of all exercises</response>
         [HttpGet]
-        public async Task<IActionResult> GetExercises()
+        public async Task<IActionResult> GetExercises([FromQuery] ExerciseParameters parameters)
         {
-            var exercises = await _repository.Exercise.GetAllExercisesAsync(false);
+            var pagedResults = await _repository.Exercise.GetAllExercisesPagedAsync(false, parameters);
 
-            var exercisesDto = _mapper.Map<List<ExerciseDto>>(exercises);
+            var exercisesDto = _mapper.Map<List<ExerciseDto>>(pagedResults.Data);
 
-            return Ok(exercisesDto);
+            return Ok(new { data = exercisesDto, pagination = pagedResults.Metadata });
         }
 
         /// <summary>
@@ -64,7 +65,6 @@ namespace API.Controllers
             return Ok(exerciseDto);
         }
 
-
         /// <summary>
         /// Create a new exercise
         /// </summary>
@@ -73,6 +73,7 @@ namespace API.Controllers
         /// <response code="201">Returns a newly created exercise</response>
         /// <response code="400">Exercise creation object sent from client is null</response>
         /// <response code="422">Invalid model state for the exercise creation object</response>
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateExercise([FromBody] ExerciseCreationDto input)
@@ -97,6 +98,7 @@ namespace API.Controllers
         /// <response code="400">Exercise update object is null</response>
         /// <response code="422">Invalid model state for the exercise update object</response>
         /// <response code="404">Exercise is not found</response>
+        [Authorize(Roles = "Admin")]
         [HttpPut("{exerciseId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
@@ -120,6 +122,7 @@ namespace API.Controllers
         /// <response code="400">Exercise patch object is null</response>
         /// <response code="422">Invalid model state for the exercise patch object</response>
         /// <response code="404">Exercise is not found</response>
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{exerciseId:guid}")]
         [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> PartiallyUpdateExercise(Guid exerciseId,
@@ -159,6 +162,7 @@ namespace API.Controllers
         /// <returns>204 no context response</returns>
         /// <response code="204">No content response</response>
         /// <response code="404">Exercise is not found</response>
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{exerciseId:guid}")]
         [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> DeleteExercise(Guid exerciseId)

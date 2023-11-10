@@ -24,9 +24,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(UserExistsFilterAttribute))]
         public async Task<IActionResult> GetWorkouts()
         {
-            var workouts = await _repository.Workout.GetAllWorkoutsAsync(false);
+            var user = HttpContext.Items["user"] as User;
+
+            var workouts = await _repository.Workout.GetAllWorkoutsAsync(user!.Id, false);
 
             var workoutsDto = _mapper.Map<IEnumerable<WorkoutDto>>(workouts);
 
@@ -34,10 +37,13 @@ namespace API.Controllers
         }
 
         [HttpGet("{workoutId:guid}", Name = "GetWorkout")]
+        [ServiceFilter(typeof(UserExistsFilterAttribute))]
         public async Task<IActionResult> GetWorkout(Guid workoutId)
         {
+            var user = HttpContext.Items["user"] as User;
+
             var workout = await _repository.Workout
-                .GetWorkoutAsync(workoutId, false);
+                .GetWorkoutAsync(user!.Id, workoutId, false);
 
             if (workout == null)
             {
@@ -52,11 +58,14 @@ namespace API.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(UserExistsFilterAttribute))]
         public async Task<IActionResult> CreateWorkout([FromBody] WorkoutCreationDto input)
         {
+            var user = HttpContext.Items["user"] as User;
+
             var workout = _mapper.Map<Workout>(input);
 
-            _repository.Workout.CreateWorkout(workout);
+            _repository.Workout.CreateWorkout(user!.Id, workout);
             await _repository.SaveAsync();
 
             var workoutDto = _mapper.Map<WorkoutDto>(workout);
@@ -66,7 +75,7 @@ namespace API.Controllers
 
         [HttpPut("{workoutId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(WorkoutExistsFilterAttribute))]
+        [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
         public async Task<IActionResult> UpdateWorkout(Guid workoutId, [FromBody] WorkoutUpdateDto input)
         {
             var workout = HttpContext.Items["workout"] as Workout;
@@ -79,7 +88,7 @@ namespace API.Controllers
 
         [HttpPatch("{workoutId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(WorkoutExistsFilterAttribute))]
+        [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
         public async Task<IActionResult> PartiallyUpdateWorkout(Guid workoutId,
             [FromBody] JsonPatchDocument<WorkoutUpdateDto> patchInput)
         {
@@ -111,7 +120,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{workoutId:guid}")]
-        [ServiceFilter(typeof(WorkoutExistsFilterAttribute))]
+        [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
         public async Task<IActionResult> DeleteWorkout(Guid workoutId)
         {
             var workout = HttpContext.Items["workout"] as Workout;
