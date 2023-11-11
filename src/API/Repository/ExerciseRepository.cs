@@ -23,10 +23,8 @@ namespace API.Repository
             query = query.Filter(param.MuscleGroup, e => e.MuscleGroup == param.MuscleGroup);
             query = query.Filter(param.EquipmentType, e => e.EquipmentType == param.EquipmentType);
 
-            if (param.EquipmentType != null)
-            {
-                query = query.Where(e => e.EquipmentType == param.EquipmentType);
-            }
+            var exerciseCount = query.ToList().Count;
+
 
             var exercises = await query
                 .Sort(e => e.Name, param.SortDescending)
@@ -34,7 +32,7 @@ namespace API.Repository
                 .Take(param.PageSize)
                 .ToListAsync();
 
-            var metadata = new OffsetPaginationMetadata(RepositoryContext.Exercises.Count(),
+            var metadata = new OffsetPaginationMetadata(exerciseCount,
                 param.PageNumber, param.PageSize);
 
             return new OffsetPaginationResponse<Exercise>(exercises, metadata);

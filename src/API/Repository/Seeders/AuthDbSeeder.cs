@@ -1,5 +1,6 @@
 ﻿using API.Models;
 using Microsoft.AspNetCore.Identity;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace API.Repository.Seeders
 {
@@ -24,6 +25,31 @@ namespace API.Repository.Seeders
             await AddDefaultRoles();
             await AddAdminUser();
             await AddDemoUser();
+            await AddTestUser();
+        }
+
+        private async Task AddTestUser()
+        {
+            var testUser = new User
+            {
+                UserName = "testUser",
+                Email = "testuser@email.com"
+            };
+
+            var existingUser = await _userManager.FindByNameAsync(testUser.UserName);
+
+            if (existingUser == null)
+            {
+                var createdUserResult = await _userManager.CreateAsync(testUser, "/TestUser321");//_configuration["TestUserPassword"]);
+
+                if (!createdUserResult.Succeeded)
+                {
+                    _logger.LogError("Error when creating a test user!");
+                    return;
+                }
+
+                await _userManager.AddToRolesAsync(testUser, UserRoles.All);
+            }
         }
 
         private async Task AddDemoUser()

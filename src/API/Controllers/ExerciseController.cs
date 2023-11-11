@@ -38,7 +38,7 @@ namespace API.Controllers
 
             var exercisesDto = _mapper.Map<List<ExerciseDto>>(pagedResults.Data);
 
-            return Ok(new { data = exercisesDto, pagination = pagedResults.Metadata });
+            return Ok(new OffsetPaginationResponse<ExerciseDto>(exercisesDto, pagedResults.Pagination));
         }
 
         /// <summary>
