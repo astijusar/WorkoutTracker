@@ -4,11 +4,13 @@ using API.Models.DTOs.Workout;
 using API.Models.RequestFeatures;
 using API.Repository.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class WorkoutController : ControllerBase

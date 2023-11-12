@@ -3,10 +3,12 @@ using API.Models;
 using API.Models.DTOs.WorkoutExercise;
 using API.Repository.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/workout/{workoutId}/exercise")]
     [ApiController]
     public class WorkoutExerciseController : ControllerBase
@@ -83,8 +85,19 @@ namespace API.Controllers
             return CreatedAtAction("CreateExerciseCollection", exercisesDto);
         }
 
-        // TODO: implement workout exercise collection PUT method
-        // [HttpPut("collection/({exerciseIds})")]
+        [HttpPut("{exerciseId}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
+        public async Task<IActionResult> UpdateExercises(Guid workoutId, Guid exerciseId,
+            [FromBody] WorkoutExerciseUpdateDto input)
+        {
+            var exercise = HttpContext.Items["workoutExercise"] as WorkoutExercise;
+
+            _mapper.Map(input, exercise);
+            await _repository.SaveAsync();
+
+            return NoContent();
+        }
 
         [HttpDelete("{exerciseId:guid}")]
         [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]

@@ -24,6 +24,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> GetExerciseSets(Guid workoutId, Guid exerciseId)
         {
             var exerciseSets = await _repository.WorkoutExerciseSet.GetExerciseSetsAsync(exerciseId, false);
@@ -34,6 +35,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{setId:guid}", Name = "GetExerciseSet")]
+        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> GetExerciseSet(Guid workoutId, Guid exerciseId, Guid setId)
         {
             var exerciseSet = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, false);
@@ -50,6 +52,7 @@ namespace API.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> CreateExerciseSet(Guid workoutId, Guid exerciseId, [FromBody] WorkoutExerciseSetCreationDto input)
         {
             var exerciseSet = _mapper.Map<WorkoutExerciseSet>(input);
@@ -64,17 +67,18 @@ namespace API.Controllers
 
         [HttpPut("{setId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> UpdateSet(Guid workoutId, Guid exerciseId, Guid setId,
             [FromBody] WorkoutExerciseSetUpdateDto input)
         {
-            var exercise = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, true);
+            var exerciseSet = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, true);
 
-            if (exercise == null)
+            if (exerciseSet == null)
             {
                 return NotFound();
             }
 
-            _mapper.Map(input, exercise);
+            _mapper.Map(input, exerciseSet);
             await _repository.SaveAsync();
 
             return NoContent();
@@ -82,6 +86,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{setId:guid}")]
+        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
         public async Task<IActionResult> DeleteExerciseSet(Guid workoutId, Guid exerciseId, Guid setId)
         {
             var exerciseSet = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, true);
