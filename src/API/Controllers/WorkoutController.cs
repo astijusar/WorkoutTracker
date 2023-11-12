@@ -1,6 +1,7 @@
 ﻿using API.Filters;
 using API.Models;
 using API.Models.DTOs.Workout;
+using API.Models.RequestFeatures;
 using API.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
@@ -25,15 +26,15 @@ namespace API.Controllers
 
         [HttpGet]
         [ServiceFilter(typeof(UserExistsFilterAttribute))]
-        public async Task<IActionResult> GetWorkouts()
+        public async Task<IActionResult> GetWorkouts([FromQuery] WorkoutParameters parameters)
         {
             var user = HttpContext.Items["user"] as User;
 
-            var workouts = await _repository.Workout.GetAllWorkoutsAsync(user!.Id, false);
+            var workouts = await _repository.Workout.GetAllWorkoutsAsync(user!.Id, false, parameters);
 
             var workoutsDto = _mapper.Map<IEnumerable<WorkoutDto>>(workouts);
 
-            return Ok(workoutsDto);
+            return Ok(new OffsetPaginationResponse<WorkoutDto>(workoutsDto, workouts.Pagination));
         }
 
         [HttpGet("{workoutId:guid}", Name = "GetWorkout")]

@@ -23,8 +23,7 @@ namespace API.Repository
             query = query.Filter(param.MuscleGroup, e => e.MuscleGroup == param.MuscleGroup);
             query = query.Filter(param.EquipmentType, e => e.EquipmentType == param.EquipmentType);
 
-            var exerciseCount = query.ToList().Count;
-
+            var exerciseCount = query.Count();
 
             var exercises = await query
                 .Sort(e => e.Name, param.SortDescending)
