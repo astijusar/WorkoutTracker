@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
 using API.Filters;
-using API.Models;
-using API.Models.DTOs.JWT;
-using API.Models.DTOs.User;
-using API.Services;
 using AutoMapper;
+using Core.Models;
+using Core.Models.DTOs.JWT;
+using Core.Models.DTOs.User;
+using Core.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;

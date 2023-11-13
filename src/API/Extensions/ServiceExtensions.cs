@@ -1,10 +1,13 @@
 ﻿using System.Reflection;
 using System.Text;
 using API.Filters;
-using API.Models;
-using API.Repository;
-using API.Repository.Interfaces;
-using API.Repository.Seeders;
+using Core;
+using Core.Models;
+using Core.Options;
+using Data.Options;
+using Data.Repository;
+using Data.Repository.Interfaces;
+using Data.Repository.Seeders;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -78,10 +81,29 @@ namespace API.Extensions
                 opt.TokenValidationParameters.ValidAudience = configuration["Jwt:ValidAudience"];
                 opt.TokenValidationParameters.ValidIssuer = configuration["Jwt:ValidIssuer"];
                 opt.TokenValidationParameters.IssuerSigningKey =
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]));
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!));
             });
 
             services.AddAuthorization();
+        }
+
+        public static void ConfigureJwtOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<JwtOptions>(opt =>
+            {
+                opt.Secret = configuration["Jwt:Secret"]!;
+                opt.ValidAudience = configuration["Jwt:ValidAudience"]!;
+                opt.ValidIssuer = configuration["Jwt:ValidIssuer"]!;
+            });
+        }
+
+        public static void ConfigureUserPasswordOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<UserPasswordOptions>(opt =>
+            {
+                opt.AdminPassword = configuration["AdminPassword"]!;
+                opt.DemoUserPassword = configuration["DemoUserPassword"]!;
+            });
         }
 
         public static async Task SeedDatabase(this WebApplication app)

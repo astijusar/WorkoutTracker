@@ -1,8 +1,8 @@
 ﻿using API.Filters;
-using API.Models;
-using API.Models.DTOs.WorkoutExercise;
-using API.Repository.Interfaces;
 using AutoMapper;
+using Core.Models;
+using Core.Models.DTOs.WorkoutExercise;
+using Data.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

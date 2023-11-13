@@ -1,5 +1,5 @@
-﻿using API.Repository;
-using API.Repository.Seeders;
+﻿using Data.Repository;
+using Data.Repository.Seeders;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;

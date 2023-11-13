@@ -44,4 +44,9 @@
       <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Data\Data.csproj" />
+  </ItemGroup>
+
 </Project>

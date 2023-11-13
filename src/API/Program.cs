@@ -1,8 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using API.Extensions;
-using API.Models.Mapping;
-using API.Repository.Seeders;
-using API.Services;
+using Core.Models.Mapping;
+using Core.Services;
+using Data.Repository.Seeders;
 using Microsoft.AspNetCore.Mvc;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -28,6 +28,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureAuthenticationAndAuthorization(builder.Configuration);
+builder.Services.ConfigureJwtOptions(builder.Configuration);
+builder.Services.ConfigureUserPasswordOptions(builder.Configuration);
 
 var app = builder.Build();
 

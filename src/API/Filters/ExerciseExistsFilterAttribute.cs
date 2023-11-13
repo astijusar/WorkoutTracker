@@ -1,5 +1,5 @@
-﻿using API.Exceptions;
-using API.Repository.Interfaces;
+﻿using Core.Exceptions;
+using Data.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

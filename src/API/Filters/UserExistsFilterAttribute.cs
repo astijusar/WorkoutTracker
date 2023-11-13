@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using API.Models;
+using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

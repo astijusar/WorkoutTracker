@@ -1,9 +1,9 @@
 ﻿using API.Filters;
-using API.Models;
-using API.Models.DTOs.Exercise;
-using API.Models.RequestFeatures;
-using API.Repository.Interfaces;
 using AutoMapper;
+using Core.Models;
+using Core.Models.DTOs.Exercise;
+using Core.Models.RequestFeatures;
+using Data.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using API.Models.DTOs.Exercise;
-using API.Models.Enums;
-using API.Models.RequestFeatures;
+using Core.Models.DTOs.Exercise;
+using Core.Models.Enums;
+using Core.Models.RequestFeatures;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
