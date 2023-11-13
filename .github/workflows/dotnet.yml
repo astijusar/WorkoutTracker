@@ -11,6 +11,16 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          MSSQL_SA_PASSWORD: /Password12
+          ACCEPT_EULA: Y
+        ports:
+          - 1433:1433
+        options: --name=mssql
+
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET

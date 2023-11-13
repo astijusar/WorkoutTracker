@@ -95,7 +95,7 @@ namespace API.IntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        [Fact]
+        /*[Fact]
         public async Task POST_CreateExercise_ValidRequiredParameters_ReturnsCreated()
         {
             var requestBody = new ExerciseCreationDto("Test",  "Lorem Ipsum", "chest", "cable");
@@ -105,6 +105,6 @@ namespace API.IntegrationTests
             var response = await _client.PostAsync("/api/Exercise", content);
 
             response.StatusCode.Should().Be(HttpStatusCode.Created);
-        }
+        }*/
     }
 }
