@@ -24,10 +24,11 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
-        public async Task<IActionResult> GetExerciseSets(Guid workoutId, Guid exerciseId)
+        [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
+        public IActionResult GetExerciseSets(Guid workoutId, Guid exerciseId)
         {
-            var exerciseSets = await _repository.WorkoutExerciseSet.GetExerciseSetsAsync(exerciseId, false);
+            var exercise = HttpContext.Items["workoutExercise"] as WorkoutExercise;
+            var exerciseSets = exercise!.Sets;
 
             var exerciseSetsDto = _mapper.Map<IEnumerable<WorkoutExerciseSetDto>>(exerciseSets);
 
@@ -35,10 +36,11 @@ namespace API.Controllers
         }
 
         [HttpGet("{setId:guid}", Name = "GetExerciseSet")]
-        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
-        public async Task<IActionResult> GetExerciseSet(Guid workoutId, Guid exerciseId, Guid setId)
+        [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
+        public IActionResult GetExerciseSet(Guid workoutId, Guid exerciseId, Guid setId)
         {
-            var exerciseSet = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, false);
+            var exercise = HttpContext.Items["workoutExercise"] as WorkoutExercise;
+            var exerciseSet = exercise!.Sets.SingleOrDefault(s => s.Id == setId);
 
             if (exerciseSet == null)
             {
@@ -52,12 +54,13 @@ namespace API.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
+        [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
         public async Task<IActionResult> CreateExerciseSet(Guid workoutId, Guid exerciseId, [FromBody] WorkoutExerciseSetCreationDto input)
         {
+            var exercise = HttpContext.Items["workoutExercise"] as WorkoutExercise;
             var exerciseSet = _mapper.Map<WorkoutExerciseSet>(input);
 
-            await _repository.WorkoutExerciseSet.CreateExerciseSetAsync(exerciseId, exerciseSet);
+            exercise!.Sets.Add(exerciseSet);
             await _repository.SaveAsync();
 
             var exerciseSetDto = _mapper.Map<WorkoutExerciseSetDto>(exerciseSet);
@@ -67,11 +70,12 @@ namespace API.Controllers
 
         [HttpPut("{setId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
+        [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
         public async Task<IActionResult> UpdateSet(Guid workoutId, Guid exerciseId, Guid setId,
             [FromBody] WorkoutExerciseSetUpdateDto input)
         {
-            var exerciseSet = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, true);
+            var exercise = HttpContext.Items["workoutExercise"] as WorkoutExercise;
+            var exerciseSet = exercise!.Sets.SingleOrDefault(s => s.Id == setId);
 
             if (exerciseSet == null)
             {
@@ -86,10 +90,11 @@ namespace API.Controllers
 
 
         [HttpDelete("{setId:guid}")]
-        [ServiceFilter(typeof(ExerciseExistsFilterAttribute))]
+        [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
         public async Task<IActionResult> DeleteExerciseSet(Guid workoutId, Guid exerciseId, Guid setId)
         {
-            var exerciseSet = await _repository.WorkoutExerciseSet.GetExerciseSetAsync(exerciseId, setId, true);
+            var exercise = HttpContext.Items["workoutExercise"] as WorkoutExercise;
+            var exerciseSet = exercise!.Sets.SingleOrDefault(s => s.Id == setId);
 
             if (exerciseSet == null)
             {

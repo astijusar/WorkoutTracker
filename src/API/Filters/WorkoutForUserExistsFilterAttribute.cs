@@ -45,7 +45,7 @@ namespace API.Filters
             context.HttpContext.Items.Add("user", user);
 
             var method = context.HttpContext.Request.Method;
-            var trackChanges = method.Equals("PUT") || method.Equals("PATCH");
+            var trackChanges = method.Equals("PUT") || method.Equals("PATCH") || method.Equals("DELETE");
             var id = context.ActionArguments["workoutId"];
             
             if (id == null)

@@ -20,7 +20,7 @@ namespace API.Filters
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var method = context.HttpContext.Request.Method;
-            var trackChanges = method.Equals("PUT") || method.Equals("PATCH");
+            var trackChanges = method.Equals("PUT") || method.Equals("PATCH") || method.Equals("DELETE");
             var id = context.ActionArguments["exerciseId"];
 
             if (id == null)

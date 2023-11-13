@@ -26,9 +26,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetExercises(Guid workoutId)
+        [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
+        public IActionResult GetExercises(Guid workoutId)
         {
-            var exercises = await _repository.WorkoutExercise.GetWorkoutExercisesAsync(workoutId, false);
+            var workout = HttpContext.Items["workout"] as Workout;
+
+            var exercises = workout!.Exercises;
 
             var exercisesDto = _mapper.Map<IEnumerable<WorkoutExerciseDto>>(exercises);
 
@@ -36,10 +39,12 @@ namespace API.Controllers
         }
 
         [HttpGet("{exerciseId:guid}", Name = "GetWorkoutExercise")]
-        public async Task<IActionResult> GetExercise(Guid workoutId, Guid exerciseId)
+        [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
+        public IActionResult GetExercise(Guid workoutId, Guid exerciseId)
         {
-            var exercise = await _repository.WorkoutExercise
-                .GetWorkoutExerciseAsync(workoutId, exerciseId, false);
+            var workout = HttpContext.Items["workout"] as Workout;
+
+            var exercise = workout!.Exercises.SingleOrDefault(e => e.Id == exerciseId);
 
             if (exercise == null)
             {
@@ -56,9 +61,10 @@ namespace API.Controllers
         [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
         public async Task<IActionResult> CreateExercise(Guid workoutId, [FromBody] WorkoutExerciseCreationDto input)
         {
+            var workout = HttpContext.Items["workout"] as Workout;
             var exercise = _mapper.Map<WorkoutExercise>(input);
 
-            await _repository.WorkoutExercise.CreateWorkoutExerciseAsync(workoutId, exercise);
+            workout!.Exercises.Add(exercise);
             await _repository.SaveAsync();
 
             var exerciseDto = _mapper.Map<WorkoutExerciseDto>(exercise);
