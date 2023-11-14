@@ -82,7 +82,7 @@ namespace API.Controllers
             return CreatedAtAction(nameof(Login), userDto);
         }
 
-        [HttpPost("accessToken")]
+        [HttpPost("refresh")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> GetAccessToken([FromBody] RefreshAccessTokenDto refreshAccessTokenDto)
         {

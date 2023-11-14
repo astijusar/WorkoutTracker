@@ -25,6 +25,7 @@ builder.Services.ConfigureFilters();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.ConfigureControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.ConfigureCors();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureAuthenticationAndAuthorization(builder.Configuration);
@@ -39,7 +40,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("AllowAll");
+
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -97,6 +97,19 @@ namespace API.Extensions
             });
         }
 
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+        }
+
         public static void ConfigureUserPasswordOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<UserPasswordOptions>(opt =>
