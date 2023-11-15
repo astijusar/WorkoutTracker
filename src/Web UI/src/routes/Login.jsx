@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
@@ -25,10 +26,9 @@ const Login = () => {
                 username: data.username,
                 password: data.password,
             }).unwrap();
-            dispatch(setCredentials({ ...userData, username: data.username }));
+            dispatch(setCredentials({ ...userData, user: data.username }));
             navigate("/profile");
         } catch (err) {
-            console.log(err);
             if (!err?.response && err?.status === "FETCH_ERROR") {
                 setApiError("Unable to reach server. Please try again later!");
             } else if (err.response?.status === 400) {
@@ -58,9 +58,8 @@ const Login = () => {
                     {apiError && (
                         <motion.div
                             className="text-error mb-1"
-                            initial={{ scale: 0.5, opacity: 0 }}
+                            initial={{ scale: 0.25, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.5, opacity: 0 }}
                             transition={{ duration: 0.5 }}
                         >
                             {apiError}
@@ -124,12 +123,12 @@ const Login = () => {
                         </button>
                         <p className="text-sm font-light">
                             Don’t have an account yet?{" "}
-                            <a
-                                href="#"
-                                className="font-medium text-secondary hover:underline "
+                            <Link
+                                className="font-medium text-secondary hover:underline"
+                                to="/register"
                             >
                                 Sign up
-                            </a>
+                            </Link>
                         </p>
                     </form>
                 </div>
