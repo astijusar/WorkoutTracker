@@ -25,7 +25,7 @@ const Login = () => {
                 username: data.username,
                 password: data.password,
             }).unwrap();
-            dispatch(setCredentials({ ...userData, userName }));
+            dispatch(setCredentials({ ...userData, username: data.username }));
             navigate("/profile");
         } catch (err) {
             console.log(err);
