@@ -1,8 +1,8 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { setCredentials, logOut } from '../../auth/authSlice';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { setCredentials, logOut } from "../../auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'http://localhost:5264/api',
+    baseUrl: "http://localhost:5264/api",
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.accessToken;
 
@@ -13,16 +13,18 @@ const baseQuery = fetchBaseQuery({
         headers.set("Content-type", "application/json");
 
         return headers;
-    }
+    },
 });
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
 
     if (result?.error?.originalStatus === 401) {
-        console.log('sending refresh token');
-        const refreshResult = await baseQuery('/auth/refresh', api, extraOptions);
-        console.log(refreshResult);
+        const refreshResult = await baseQuery(
+            "/auth/refresh",
+            api,
+            extraOptions
+        );
 
         if (refreshResult?.data) {
             const user = api.getState().auth.user;
@@ -32,11 +34,11 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
             api.dispatch(logOut());
         }
     }
-    
+
     return result;
-}
+};
 
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
-    endpoints: builder => ({})
+    endpoints: (builder) => ({}),
 });
