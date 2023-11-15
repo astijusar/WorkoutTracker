@@ -20,11 +20,12 @@ const authSlice = createSlice({
                 jwtDecode(accessToken)[
                     "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
                 ];
+            // not very secure
             Cookies.set("accessToken", accessToken, {
                 expires: 10 / (24 * 60),
                 secure: true,
             });
-            Cookies.set("refreshToken, refreshToken", {
+            Cookies.set("refreshToken", refreshToken, {
                 expires: 1,
                 secure: true,
             });

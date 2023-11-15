@@ -1,7 +1,7 @@
 import WorkoutBarChart from "../components/WorkoutBarChart";
 
 import { useSelector, useDispatch } from "react-redux";
-import { selectCurrentUser, logOut } from "../auth/authSlice";
+import { selectCurrentUser, logOut } from "../features/auth/authSlice";
 
 const Profile = () => {
     const dispatch = useDispatch();

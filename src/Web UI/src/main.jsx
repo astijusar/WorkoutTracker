@@ -11,7 +11,7 @@ import History from "./routes/History.jsx";
 import { store } from "./app/store.js";
 import { Provider } from "react-redux";
 import Login from "./routes/Login.jsx";
-import RequireAuth from "./auth/RequireAuth.jsx";
+import RequireAuth from "./features/auth/RequireAuth.jsx";
 import Register from "./routes/Register.jsx";
 
 const router = createBrowserRouter([

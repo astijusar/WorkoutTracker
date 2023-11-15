@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { useRegisterMutation } from "../auth/authApiSlice";
+import { useRegisterMutation } from "../features/auth/authApiSlice";
 import { useState } from "react";
 
 const Register = () => {

@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { setCredentials } from "../auth/authSlice";
-import { useLoginMutation } from "../auth/authApiSlice";
+import { setCredentials } from "../features/auth/authSlice";
+import { useLoginMutation } from "../features/auth/authApiSlice";
 import { useState } from "react";
 
 const Login = () => {
