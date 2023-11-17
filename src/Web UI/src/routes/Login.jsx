@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { setCredentials } from "../features/auth/authSlice";
 import { useLoginMutation } from "../features/auth/authApiSlice";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../features/auth/authSlice";
+import { useState, useEffect } from "react";
 
 const Login = () => {
     const {
@@ -19,6 +21,11 @@ const Login = () => {
     const navigate = useNavigate();
     const [login, { isLoading }] = useLoginMutation();
     const dispatch = useDispatch();
+    const username = useSelector(selectCurrentUser);
+
+    useEffect(() => {
+        if (username) navigate("/profile");
+    }, []);
 
     const onSubmit = async (data) => {
         try {

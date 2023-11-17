@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useRegisterMutation } from "../features/auth/authApiSlice";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../features/auth/authSlice";
+import { useState, useEffect } from "react";
 
 const Register = () => {
     const {
@@ -17,6 +19,11 @@ const Register = () => {
     const [apiError, setApiError] = useState("");
     const navigate = useNavigate();
     const [registerUser, { isLoading }] = useRegisterMutation();
+    const username = useSelector(selectCurrentUser);
+
+    useEffect(() => {
+        if (username) navigate("/profile");
+    }, []);
 
     const onSubmit = async (data) => {
         try {
