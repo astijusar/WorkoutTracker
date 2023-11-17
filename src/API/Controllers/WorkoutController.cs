@@ -34,7 +34,7 @@ namespace API.Controllers
 
             var workouts = await _repository.Workout.GetAllWorkoutsAsync(user!.Id, false, parameters);
 
-            var workoutsDto = _mapper.Map<IEnumerable<WorkoutDto>>(workouts);
+            var workoutsDto = _mapper.Map<IEnumerable<WorkoutDto>>(workouts.Data);
 
             return Ok(new OffsetPaginationResponse<WorkoutDto>(workoutsDto, workouts.Pagination));
         }

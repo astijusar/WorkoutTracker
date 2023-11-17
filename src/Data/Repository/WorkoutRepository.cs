@@ -30,6 +30,10 @@ namespace Data.Repository
                 .Sort(e => e.Name, param.SortDescending)
                 .Skip((param.PageNumber - 1) * param.PageSize)
                 .Take(param.PageSize)
+                .Include(w => w.Exercises)
+                    .ThenInclude(e => e.Exercise)
+                .Include(w => w.Exercises)
+                    .ThenInclude(we => we.Sets)
                 .ToListAsync();
 
             var metadata = new OffsetPaginationMetadata(workoutsCount,
