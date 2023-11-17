@@ -23,9 +23,6 @@ const WorkoutTemplateCard = ({ workout }) => {
                                 <a>Edit</a>
                             </li>
                             <li>
-                                <a>Rename</a>
-                            </li>
-                            <li>
                                 <a>Delete</a>
                             </li>
                         </ul>

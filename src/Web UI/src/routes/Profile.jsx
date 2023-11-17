@@ -86,7 +86,7 @@ const Profile = () => {
                         </svg>
                     </div>
                     <div className="mt-3 h-96 flex justify-center">
-                        <WorkoutBarChart />
+                        <WorkoutBarChart workouts={workouts} />
                     </div>
                 </>
             )}
