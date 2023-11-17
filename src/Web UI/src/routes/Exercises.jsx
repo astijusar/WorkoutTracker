@@ -9,15 +9,13 @@ const Exercises = () => {
     const {
         data: { data: exercises, pagination } = {},
         isLoading,
-        isSuccess,
-        isError,
-        error,
+        isFetching,
     } = useGetExercisesQuery({ pageNumber: page });
 
     return (
         <div className="mx-5">
             <h1 className="mt-5 text-5xl font-semibold">Exercises</h1>
-            {isLoading ? (
+            {isLoading || isFetching ? (
                 <CenterSpinner />
             ) : (
                 <ExerciseList exercises={exercises} />

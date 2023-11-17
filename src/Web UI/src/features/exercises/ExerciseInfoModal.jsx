@@ -8,11 +8,10 @@ const ExerciseInfoModal = ({ exercise, modalRef }) => {
                     </button>
                 </form>
                 <h3 className="font-bold text-2xl p-3">{exercise.name}</h3>
-                <div className="w-full">
-                    <img
-                        src="/img/placeholder.jpg"
-                        className="h-60 w-full p-0"
-                    />
+                <div className="flex justify-center items-center w-full bg-primary h-60">
+                    <h1 className="font-bold text-3xl tracking-widest">
+                        EXERCISE IMAGE
+                    </h1>
                 </div>
                 <h3 className="font-bold text-xl p-3">Instructions</h3>
                 {exercise.instructions ? (

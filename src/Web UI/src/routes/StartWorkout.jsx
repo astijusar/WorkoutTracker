@@ -2,16 +2,16 @@ import { useState } from "react";
 import WorkoutTemplateList from "../features/workouts/WorkoutTemplateList";
 import CenterSpinner from "../components/CenterSpinner";
 import { useGetWorkoutsQuery } from "../features/workouts/workoutsApiSlice";
+import { useNavigate } from "react-router-dom";
 
 const StartWorkout = () => {
     const [page, setPage] = useState(1);
+    const navigate = useNavigate();
 
     const {
         data: { data: workouts, pagination } = {},
         isLoading,
-        isSuccess,
-        isError,
-        error,
+        isFetching,
     } = useGetWorkoutsQuery({ pageNumber: page, template: true });
 
     return (
@@ -20,7 +20,10 @@ const StartWorkout = () => {
             <h5 className="mt-5 text-sm text-gray-400 tracking-widest">
                 QUICK START
             </h5>
-            <button className="mt-3 w-full btn btn-secondary tracking-widest text-white">
+            <button
+                className="mt-3 w-full btn btn-secondary tracking-widest text-white"
+                onClick={() => navigate("/workout")}
+            >
                 START AN EMPTY WORKOUT
             </button>
             <div className="mt-3 flex justify-between">
@@ -40,7 +43,7 @@ const StartWorkout = () => {
                     />
                 </svg>
             </div>
-            {isLoading ? (
+            {isLoading || isFetching ? (
                 <CenterSpinner />
             ) : (
                 <>

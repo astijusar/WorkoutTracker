@@ -10,15 +10,13 @@ const History = () => {
     const {
         data: { data: workouts, pagination } = {},
         isLoading,
-        isSuccess,
-        isError,
-        error,
+        isFetching,
     } = useGetWorkoutsQuery({ pageNumber: page, template: false });
 
     return (
         <div className="mx-5">
             <h1 className="mt-5 text-5xl font-semibold">History</h1>
-            {isLoading ? (
+            {isLoading || isFetching ? (
                 <CenterSpinner />
             ) : (
                 <>

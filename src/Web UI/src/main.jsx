@@ -7,6 +7,7 @@ import Profile from "./routes/Profile.jsx";
 import StartWorkout from "./routes/StartWorkout.jsx";
 import Exercises from "./routes/Exercises.jsx";
 import History from "./routes/History.jsx";
+import Workout from "./routes/Workout.jsx";
 
 import { store } from "./app/store.js";
 import { Provider } from "react-redux";
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
                     {
                         path: "exercises",
                         element: <Exercises />,
+                    },
+                    {
+                        path: "workout",
+                        element: <Workout />,
                     },
                 ],
             },

@@ -9,14 +9,17 @@ import SettingsButton from "../features/profile/SettingsButton";
 const Profile = () => {
     const userName = useSelector(selectCurrentUser);
 
-    const { data: { data: workouts, pagination } = {}, isLoading } =
-        useGetWorkoutsQuery({ pageSize: 50, template: false });
+    const {
+        data: { data: workouts, pagination } = {},
+        isLoading,
+        isFetching,
+    } = useGetWorkoutsQuery({ pageSize: 50, template: false });
 
     return (
         <div className="mx-5">
             <SettingsButton />
             <h1 className="text-5xl font-semibold">Profile</h1>
-            {isLoading ? (
+            {isLoading || isFetching ? (
                 <CenterSpinner />
             ) : (
                 <>

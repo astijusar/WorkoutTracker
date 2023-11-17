@@ -10,7 +10,8 @@ const Exercise = ({ exercise }) => {
             <motion.div
                 key={exercise.id}
                 whileHover={{ scale: 1.1 }}
-                className="flex items-center p-2 gap-3 hover:cursor-pointer"
+                transition={{ type: "spring", stiffness: 600, damping: 20 }}
+                className="flex items-center p-2 ms-2 gap-3 hover:cursor-pointer"
                 onClick={() => modalRef.current.showModal()}
             >
                 <div className="avatar">
