@@ -18,7 +18,7 @@ const Exercises = () => {
             {isLoading || isFetching ? (
                 <CenterSpinner />
             ) : (
-                <ExerciseList exercises={exercises} />
+                <ExerciseList exercises={exercises} addButton={false} />
             )}
         </div>
     );

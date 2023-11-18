@@ -14,11 +14,11 @@ const SettingsModal = ({ modalRef }) => {
                 </form>
                 <div className="flex flex-col gap-4">
                     <h3 className="font-bold text-2xl">Settings</h3>
-                    <button className="btn btn-warning w-full">
+                    <button className="btn btn-warning w-full hover:bg-yellow-500">
                         DELETE WORKOUT HISTORY
                     </button>
                     <button
-                        className="btn btn-error w-full"
+                        className="btn btn-error w-full hover:bg-red-500"
                         onClick={() => dispatch(logOut())}
                     >
                         LOG OUT

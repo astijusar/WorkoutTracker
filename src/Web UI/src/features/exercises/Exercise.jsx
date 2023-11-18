@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import ExerciseInfoModal from "./ExerciseInfoModal";
 
-const Exercise = ({ exercise }) => {
+const Exercise = ({ exercise, addButton }) => {
     const modalRef = useRef(null);
 
     return (
@@ -11,7 +11,7 @@ const Exercise = ({ exercise }) => {
                 key={exercise.id}
                 whileHover={{ scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 600, damping: 20 }}
-                className="flex items-center p-2 ms-2 gap-3 hover:cursor-pointer"
+                className="flex items-center p-2 ms-2 gap-3 w-11/12 hover:cursor-pointer"
                 onClick={() => modalRef.current.showModal()}
             >
                 <div className="avatar">
@@ -26,7 +26,11 @@ const Exercise = ({ exercise }) => {
                     </p>
                 </div>
             </motion.div>
-            <ExerciseInfoModal exercise={exercise} modalRef={modalRef} />
+            <ExerciseInfoModal
+                exercise={exercise}
+                modalRef={modalRef}
+                addButton={addButton}
+            />
         </>
     );
 };
