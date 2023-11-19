@@ -1,13 +1,85 @@
-const WorkoutExercise = ({ name }) => {
+import { useDispatch } from "react-redux";
+import { removeExercise, updateExercise } from "../workouts/workoutSlice";
+import { useRef } from "react";
+
+const WorkoutExercise = ({ exercise }) => {
+    const dispatch = useDispatch();
+    const deletionWarningModalRef = useRef(null);
+
+    const onDelete = () => {
+        dispatch(removeExercise({ id: exercise.id }));
+    };
+
+    const onWeightChange = (index, e) => {
+        const newWeight = e.target.value;
+        const updatedExercise = {
+            ...exercise,
+            sets: exercise.sets.map((set, i) =>
+                i === index ? { ...set, weight: newWeight } : set
+            ),
+        };
+        dispatch(updateExercise(updatedExercise));
+    };
+
+    const onRepsChange = (index, e) => {
+        const newReps = e.target.value;
+        const updatedExercise = {
+            ...exercise,
+            sets: exercise.sets.map((set, i) =>
+                i === index ? { ...set, reps: newReps } : set
+            ),
+        };
+        dispatch(updateExercise(updatedExercise));
+    };
+
+    const onSetDone = (index, e) => {
+        const status = e.target.checked;
+        const updatedExercise = {
+            ...exercise,
+            sets: exercise.sets.map((set, i) =>
+                i === index ? { ...set, done: status } : set
+            ),
+        };
+        dispatch(updateExercise(updatedExercise));
+    };
+
+    const onAddSet = () => {
+        const lastSet = exercise.sets[exercise.sets.length - 1];
+        const newSet = lastSet
+            ? { reps: lastSet.reps, weight: lastSet.weight, done: false }
+            : { reps: 0, weight: 0, done: false };
+
+        const updatedExercise = {
+            ...exercise,
+            sets: [...exercise.sets, newSet],
+        };
+        dispatch(updateExercise(updatedExercise));
+    };
+
+    const onRemoveSet = () => {
+        if (exercise.sets.length === 1) {
+            dispatch(removeExercise({ id: exercise.id }));
+        } else {
+            const updatedExercise = {
+                ...exercise,
+                sets: exercise.sets.slice(0, -1),
+            };
+            dispatch(updateExercise(updatedExercise));
+        }
+    };
+
     return (
         <div>
             <div className="flex justify-between mb-2">
-                <h5 className="font-semibold text-secondary">{name}</h5>
+                <h5 className="font-semibold text-secondary">
+                    {exercise.name}
+                </h5>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                     fill="currentColor"
-                    className="w-5 h-5 text-secondary me-4"
+                    className="w-5 h-5 text-secondary me-4 hover:cursor-pointer"
+                    onClick={() => onDelete()}
                 >
                     <path
                         fillRule="evenodd"
@@ -27,88 +99,59 @@ const WorkoutExercise = ({ name }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td className="font-semibold text-lg">1</td>
-                        <td>30 kg x 12</td>
-                        <td className="font-semibold text-lg ps-0">
-                            <input
-                                type="text"
-                                className="input w-16 h-8 text-center"
-                                value={30}
-                            />
-                        </td>
-                        <td className="font-semibold text-lg ps-0">
-                            <input
-                                type="text"
-                                className="input w-16 h-8 text-center"
-                                value={12}
-                            />
-                        </td>
-                        <td className="w-0">
-                            <input
-                                type="checkbox"
-                                checked="checked"
-                                className="checkbox checkbox-success"
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="font-semibold text-lg">2</td>
-                        <td>30 kg x 12</td>
-                        <td className="font-semibold text-lg ps-0">
-                            <input
-                                type="text"
-                                className="input w-16 h-8 text-center"
-                                value={30}
-                            />
-                        </td>
-                        <td className="font-semibold text-lg ps-0">
-                            <input
-                                type="text"
-                                className="input w-16 h-8 text-center"
-                                value={12}
-                            />
-                        </td>
-                        <td className="w-0">
-                            <input
-                                type="checkbox"
-                                checked="checked"
-                                className="checkbox checkbox-success"
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="font-semibold text-lg">3</td>
-                        <td>30 kg x 10</td>
-                        <td className="font-semibold text-lg ps-0">
-                            <input
-                                type="text"
-                                className="input w-16 h-8 text-center"
-                                value={30}
-                            />
-                        </td>
-                        <td className="font-semibold text-lg ps-0">
-                            <input
-                                type="text"
-                                className="input w-16 h-8 text-center"
-                                value={10}
-                            />
-                        </td>
-                        <td className="w-0">
-                            <input
-                                type="checkbox"
-                                checked={false}
-                                className="checkbox checkbox-success"
-                            />
-                        </td>
-                    </tr>
+                    {exercise.sets.map((set, index) => (
+                        <tr key={exercise.id + exercise.exerciseId + index}>
+                            <td className="font-semibold text-lg">
+                                {index + 1}
+                            </td>
+                            <td>
+                                {10} kg x {10}
+                            </td>
+                            <td className="font-semibold text-lg ps-0">
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="0.1"
+                                    placeholder="0"
+                                    className="input w-16 h-8 text-center placeholder:font-semibold placeholder:text-md placeholder:text-slate-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    value={set.weight}
+                                    onChange={(e) => onWeightChange(index, e)}
+                                />
+                            </td>
+                            <td className="font-semibold text-lg ps-0">
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="0.1"
+                                    placeholder="0"
+                                    className="input w-16 h-8 text-center placeholder:font-semibold placeholder:text-md placeholder:text-slate-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    value={set.reps}
+                                    onChange={(e) => onRepsChange(index, e)}
+                                />
+                            </td>
+                            <td className="w-0">
+                                <input
+                                    type="checkbox"
+                                    checked={set.done}
+                                    className="checkbox checkbox-success"
+                                    onChange={(e) => onSetDone(index, e)}
+                                />
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
             <div className="flex justify-center">
-                <button className="btn btn-ghost font-medium tracking-widest text-success">
+                <button
+                    className="btn btn-ghost font-medium tracking-widest text-success"
+                    onClick={() => onAddSet()}
+                >
                     ADD SET
                 </button>
-                <button className="btn btn-ghost font-medium tracking-widest text-error">
+                <button
+                    className="btn btn-ghost font-medium tracking-widest text-error"
+                    onClick={() => onRemoveSet()}
+                >
                     REMOVE SET
                 </button>
             </div>

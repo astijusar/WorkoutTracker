@@ -1,8 +1,7 @@
+import Exercise from "../exercises/Exercise";
 import CenterSpinner from "../../components/CenterSpinner";
-import ExerciseList from "../exercises/ExerciseList";
 import { useGetExercisesQuery } from "../exercises/exercisesApiSlice";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 const AddWorkoutExerciseModal = ({ modalRef }) => {
     const [page, setPage] = useState(1);
@@ -14,7 +13,7 @@ const AddWorkoutExerciseModal = ({ modalRef }) => {
     } = useGetExercisesQuery({ pageNumber: page });
 
     return (
-        <dialog ref={modalRef} className="modal">
+        <dialog ref={modalRef} className="modal" id="addExerciseModal">
             <div className="modal-box p-0">
                 <form method="dialog">
                     <button className="btn btn-sm btn-circle btn-ghost p-3 absolute right-2 top-2">
@@ -22,7 +21,7 @@ const AddWorkoutExerciseModal = ({ modalRef }) => {
                     </button>
                 </form>
                 <div className="p-3 flex flex-col gap-3">
-                    <h1 className="font-semibold text-2xl">Exercises</h1>
+                    <h1 className="font-semibold text-3xl">Exercises</h1>
                     <input
                         type="text"
                         placeholder="Search exercise..."
@@ -31,11 +30,16 @@ const AddWorkoutExerciseModal = ({ modalRef }) => {
                     {isLoading || isFetching ? (
                         <CenterSpinner />
                     ) : (
-                        <ExerciseList
-                            exercises={exercises}
-                            filter={false}
-                            addButton={true}
-                        />
+                        <div className="flex flex-col">
+                            {exercises.map((ex) => (
+                                <Exercise
+                                    key={ex.id}
+                                    exercise={ex}
+                                    addButton={true}
+                                    listModalRef={modalRef}
+                                />
+                            ))}
+                        </div>
                     )}
                 </div>
             </div>

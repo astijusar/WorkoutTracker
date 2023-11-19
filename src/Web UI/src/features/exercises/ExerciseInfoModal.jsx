@@ -1,4 +1,4 @@
-const ExerciseInfoModal = ({ exercise, modalRef, addButton }) => {
+const ExerciseInfoModal = ({ exercise, modalRef }) => {
     return (
         <dialog ref={modalRef} className="modal">
             <div className="modal-box p-0">
@@ -22,13 +22,6 @@ const ExerciseInfoModal = ({ exercise, modalRef, addButton }) => {
                     <p className="ps-3 mb-3 font-thin">
                         There are no instructions.
                     </p>
-                )}
-                {addButton && (
-                    <div className="flex justify-end me-3 mb-3">
-                        <button className="btn btn-secondary">
-                            Add exercise
-                        </button>
-                    </div>
                 )}
             </div>
             <form method="dialog" className="modal-backdrop">

@@ -1,7 +1,15 @@
 import { useStopwatch } from "react-timer-hook";
+import moment from "moment";
 
-const Stopwatch = () => {
-    const { seconds, minutes, hours } = useStopwatch({ autoStart: true });
+const Stopwatch = ({ start }) => {
+    const offsetSeconds = start ? moment().diff(moment(start), "seconds") : 0;
+    let stopwatchOffset = new Date();
+    stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + offsetSeconds);
+
+    const { seconds, minutes, hours } = useStopwatch({
+        autoStart: true,
+        offsetTimestamp: stopwatchOffset,
+    });
 
     return (
         <>
