@@ -51,7 +51,7 @@ app.MapControllers();
 
 try
 {
-    //app.RunMigrations();
+    app.RunMigrations();
     await app.SeedDatabase();
 }
 catch (Exception e)

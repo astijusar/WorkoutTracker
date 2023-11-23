@@ -10,11 +10,6 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
-	<Target Name="PrePublishTarget" AfterTargets="Publish">
-		<Exec Command="dotnet tool restore" />
-		<Exec Command="dotnet ef database update" />
-	</Target>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
