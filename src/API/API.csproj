@@ -11,6 +11,7 @@
   </PropertyGroup>
 
 	<Target Name="PrePublishTarget" AfterTargets="Publish">
+		<Exec Command="dotnet tool restore" />
 		<Exec Command="dotnet ef database update" />
 	</Target>
 
