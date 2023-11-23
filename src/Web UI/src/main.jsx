@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import Root from "./routes/root.jsx";
+import Root from "./routes/Root.jsx";
 import Profile from "./routes/Profile.jsx";
 import StartWorkout from "./routes/StartWorkout.jsx";
 import Exercises from "./routes/Exercises.jsx";
