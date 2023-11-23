@@ -22,7 +22,7 @@ namespace API.Extensions
     {
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = "Host=localhost;Database=WorkoutTrackerDb;Username=postgres;Password=mysecretpassword";
+            var connectionString = "Host=localhost;Port=5432;Database=WorkoutTrackerDb;Username=postgres;Password=password";
 
             services.AddDbContext<ApplicationContext>(opt =>
             {
@@ -87,10 +87,20 @@ namespace API.Extensions
             })
             .AddJwtBearer(opt =>
             {
-                opt.TokenValidationParameters.ValidAudience = configuration["Jwt:ValidAudience"];
-                opt.TokenValidationParameters.ValidIssuer = configuration["Jwt:ValidIssuer"];
-                opt.TokenValidationParameters.IssuerSigningKey =
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!));
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+                {
+                    opt.TokenValidationParameters.ValidAudience = Environment.GetEnvironmentVariable("ValidAudience");
+                    opt.TokenValidationParameters.ValidIssuer = Environment.GetEnvironmentVariable("ValidIssuer");
+                    opt.TokenValidationParameters.IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Secret")!));
+                }
+                else
+                {
+                    opt.TokenValidationParameters.ValidAudience = configuration["Jwt:ValidAudience"];
+                    opt.TokenValidationParameters.ValidIssuer = configuration["Jwt:ValidIssuer"];
+                    opt.TokenValidationParameters.IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!));
+                }
             });
 
             services.AddAuthorization();
@@ -100,9 +110,18 @@ namespace API.Extensions
         {
             services.Configure<JwtOptions>(opt =>
             {
-                opt.Secret = configuration["Jwt:Secret"]!;
-                opt.ValidAudience = configuration["Jwt:ValidAudience"]!;
-                opt.ValidIssuer = configuration["Jwt:ValidIssuer"]!;
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+                {
+                    opt.Secret = Environment.GetEnvironmentVariable("Secret")!;
+                    opt.ValidAudience = Environment.GetEnvironmentVariable("ValidAudience")!;
+                    opt.ValidIssuer = Environment.GetEnvironmentVariable("ValidIssuer")!;
+                }
+                else
+                {
+                    opt.Secret = configuration["Jwt:Secret"]!;
+                    opt.ValidAudience = configuration["Jwt:ValidAudience"]!;
+                    opt.ValidIssuer = configuration["Jwt:ValidIssuer"]!;
+                }
             });
         }
 
@@ -123,8 +142,16 @@ namespace API.Extensions
         {
             services.Configure<UserPasswordOptions>(opt =>
             {
-                opt.AdminPassword = configuration["AdminPassword"]!;
-                opt.DemoUserPassword = configuration["DemoUserPassword"]!;
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+                {
+                    opt.AdminPassword = Environment.GetEnvironmentVariable("AdminPassword")!;
+                    opt.DemoUserPassword = Environment.GetEnvironmentVariable("DemoUserPassword")!;
+                }
+                else
+                {
+                    opt.AdminPassword = configuration["AdminPassword"]!;
+                    opt.DemoUserPassword = configuration["DemoUserPassword"]!;
+                }
             });
         }
 
