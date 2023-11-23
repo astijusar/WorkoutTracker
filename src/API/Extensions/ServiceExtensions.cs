@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using API.Filters;
 using Core;
 using Core.Models;
@@ -11,6 +12,7 @@ using Data.Repository.Seeders;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
 
@@ -20,13 +22,20 @@ namespace API.Extensions
     {
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
         {
-            //var connectionString = configuration["ConnectionStrings:Database"];
-            var connectionString = "Server=127.0.0.1\\mssql,1433;Database=WorkoutTrackerDB;User=sa;Password=/Password12;TrustServerCertificate=Yes";
+            var connectionString = "Host=localhost;Database=WorkoutTrackerDb;Username=postgres;Password=mysecretpassword";
 
             services.AddDbContext<ApplicationContext>(opt =>
             {
-                opt.UseSqlServer(connectionString);
-                opt.EnableDetailedErrors();
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+                {
+                    var m = Regex.Match(Environment.GetEnvironmentVariable("DATABASE_URL")!, @"postgres://(.*):(.*)@(.*):(.*)/(.*)");
+                    opt.UseNpgsql($"Server={m.Groups[3]};Port={m.Groups[4]};User Id={m.Groups[1]};Password={m.Groups[2]};Database={m.Groups[5]};sslmode=Prefer;Trust Server Certificate=true");
+                }
+                else // In Development Environment
+                {
+                    // So, use a local Connection
+                    opt.UseNpgsql(connectionString!);
+                }
             });
         }
 

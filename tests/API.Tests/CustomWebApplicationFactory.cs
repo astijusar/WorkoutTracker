@@ -25,7 +25,7 @@ namespace API.IntegrationTests
 
                 services.AddDbContext<ApplicationContext>(options =>
                 {
-                    options.UseSqlServer("Server=127.0.0.1\\mssqltest,1433;Database=WorkoutTrackerDB;User=sa;Password=/Password12;TrustServerCertificate=Yes");
+                    //options.UseSqlServer("Server=127.0.0.1\\mssqltest,1433;Database=WorkoutTrackerDB;User=sa;Password=/Password12;TrustServerCertificate=Yes");
                 });
 
                 var sp = services.BuildServiceProvider();
