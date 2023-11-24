@@ -20,6 +20,9 @@ const WorkoutTemplateCard = ({ workout }) => {
                             className="dropdown-content z-[1] menu p-2 shadow bg-neutral border border-gray-400 rounded-lg w-40 font-semibold"
                         >
                             <li>
+                                <a>Perform</a>
+                            </li>
+                            <li>
                                 <a>Edit</a>
                             </li>
                             <li>

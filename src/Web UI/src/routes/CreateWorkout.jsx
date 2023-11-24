@@ -14,7 +14,7 @@ import {
 } from "../features/workouts/workoutsApiSlice";
 import moment from "moment";
 
-const Workout = () => {
+const CreateWorkout = () => {
     const dispatch = useDispatch();
     const workout = useSelector(selectWorkout);
     const exerciseListmodalRef = useRef(null);
@@ -156,4 +156,4 @@ const Workout = () => {
     );
 };
 
-export default Workout;
+export default CreateWorkout;

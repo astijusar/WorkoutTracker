@@ -4,7 +4,7 @@ import CenterSpinner from "../components/CenterSpinner";
 import { useGetWorkoutsQuery } from "../features/workouts/workoutsApiSlice";
 import { useNavigate } from "react-router-dom";
 
-const StartWorkout = () => {
+const WorkoutTemplate = () => {
     const [page, setPage] = useState(1);
     const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ const StartWorkout = () => {
             </h5>
             <button
                 className="mt-3 w-full btn btn-secondary tracking-widest text-white"
-                onClick={() => navigate("/workout")}
+                onClick={() => navigate("/create-workout")}
             >
                 START AN EMPTY WORKOUT
             </button>
@@ -34,7 +34,8 @@ const StartWorkout = () => {
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="w-6 h-6"
+                    className="w-6 h-6 hover:cursor-pointer"
+                    onClick={() => navigate("/create-template")}
                 >
                     <path
                         fillRule="evenodd"
@@ -60,4 +61,4 @@ const StartWorkout = () => {
     );
 };
 
-export default StartWorkout;
+export default WorkoutTemplate;

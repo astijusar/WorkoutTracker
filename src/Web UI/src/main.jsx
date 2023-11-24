@@ -4,16 +4,17 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Root from "./routes/Root.jsx";
 import Profile from "./routes/Profile.jsx";
-import StartWorkout from "./routes/StartWorkout.jsx";
+import WorkoutTemplate from "./routes/WorkoutTemplate.jsx";
 import Exercises from "./routes/Exercises.jsx";
 import History from "./routes/History.jsx";
-import Workout from "./routes/Workout.jsx";
+import CreateWorkout from "./routes/CreateWorkout.jsx";
 
 import { store } from "./app/store.js";
 import { Provider } from "react-redux";
 import Login from "./routes/Login.jsx";
 import RequireAuth from "./features/auth/RequireAuth.jsx";
 import Register from "./routes/Register.jsx";
+import CreateWorkoutTempalte from "./routes/CreateWorkoutTemplate.jsx";
 
 const router = createBrowserRouter([
     {
@@ -44,16 +45,20 @@ const router = createBrowserRouter([
                         element: <History />,
                     },
                     {
-                        path: "start-workout",
-                        element: <StartWorkout />,
+                        path: "workout-template",
+                        element: <WorkoutTemplate />,
                     },
                     {
                         path: "exercises",
                         element: <Exercises />,
                     },
                     {
-                        path: "workout",
-                        element: <Workout />,
+                        path: "create-workout",
+                        element: <CreateWorkout />,
+                    },
+                    {
+                        path: "create-template",
+                        element: <CreateWorkoutTempalte />,
                     },
                 ],
             },
