@@ -76,6 +76,50 @@ namespace Data.Repository.Seeders
                                 MeasurementType = MeasurementType.Kilograms
                             }
                         }
+                    },
+                    new()
+                    {
+                        ExerciseId = ExerciseConstants.GetExerciseId(1),
+                        Order = 2,
+                        Sets = new List<WorkoutExerciseSet>
+                        {
+                            new()
+                            {
+                                Order = 1,
+                                Reps = 20,
+                                Weight = 5,
+                                MeasurementType = MeasurementType.Kilograms
+                            },
+                            new()
+                            {
+                                Order = 2,
+                                Reps = 15,
+                                Weight = 5,
+                                MeasurementType = MeasurementType.Kilograms
+                            }
+                        }
+                    },
+                    new()
+                    {
+                        ExerciseId = ExerciseConstants.GetExerciseId(4),
+                        Order = 3,
+                        Sets = new List<WorkoutExerciseSet>
+                        {
+                            new()
+                            {
+                                Order = 1,
+                                Reps = 10,
+                                Weight = 12,
+                                MeasurementType = MeasurementType.Kilograms
+                            },
+                            new()
+                            {
+                                Order = 2,
+                                Reps = 2,
+                                Weight = 30,
+                                MeasurementType = MeasurementType.Kilograms
+                            }
+                        }
                     }
                 }
             };

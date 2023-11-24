@@ -6,6 +6,7 @@ namespace Data.Repository.Seeders
     internal static class ExerciseConstants
     {
         public static Guid GetExerciseId(int index) => Exercises.ElementAt(index).Id;
+        public static Guid GetExerciseIdByName(string name) => Exercises.First(e => e.Name == name).Id;
 
         public static readonly List<Exercise> Exercises = new()
         {
@@ -144,6 +145,52 @@ namespace Data.Repository.Seeders
 
 *Note: Keep your neck in a neutral position and avoid pulling on your neck with your hands.*"
             },
+            new Exercise
+            {
+                Id = new Guid("3b289a3a-5fbf-482a-9c6a-9d6a3b8ffef2"),
+                Name = "Deadlift",
+                MuscleGroup = MuscleGroup.LowerBack,
+                EquipmentType = Equipment.Barbell,
+                Instructions = @"### Deadlift
+
+1. **Setup:** Stand with your feet shoulder-width apart, toes under the barbell. Grip the barbell with hands shoulder-width apart.
+2. **Lifting Phase:** Lift the barbell by extending your hips and knees, keeping your back straight.
+3. **Standing Phase:** Stand upright with the barbell, shoulders back, and chest up.
+4. **Lowering Phase:** Lower the barbell back to the ground in a controlled manner.
+5. **Repeat:** Perform the desired number of repetitions.
+
+*Note: Maintain a neutral spine and engage your core throughout the exercise.*"
+            },
+            new Exercise
+            {
+                Id = new Guid("db66c651-2a49-4a62-a2d4-70eb12d5b9ab"),
+                Name = "Leg Press",
+                MuscleGroup = MuscleGroup.Quadriceps,
+                EquipmentType = Equipment.Machine,
+                Instructions = @"### Leg Press
+
+1. **Setup:** Sit on the leg press machine with your back flat against the pad and feet on the platform.
+2. **Pressing Phase:** Push the platform away by extending your knees, straightening your legs.
+3. **Bending Phase:** Bend your knees to bring the platform back towards you.
+4. **Repeat:** Perform the desired number of repetitions.
+
+*Note: Adjust the machine for proper alignment and start with a manageable weight.*"
+            },
+            new Exercise
+            {
+                Id = new Guid("4c9cc682-4f6d-4d0b-9e0f-1c9fe13b47dd"),
+                Name = "Plank",
+                MuscleGroup = MuscleGroup.Abdominals,
+                EquipmentType = Equipment.Bodyweight,
+                Instructions = @"### Plank
+
+1. **Setup:** Start in a forearm plank position with your elbows directly below your shoulders.
+2. **Hold:** Keep your body in a straight line from head to heels, engaging your core.
+3. **Breathing:** Breathe deeply and hold the position.
+4. **Repeat:** Perform the plank for the desired duration.
+
+*Note: Keep your hips in line with your shoulders and avoid sagging or arching.*"
+            }
         };
     }
 }
