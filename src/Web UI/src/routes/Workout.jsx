@@ -4,8 +4,14 @@ import Stopwatch from "../features/workouts/Stopwatch";
 import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectWorkout } from "../features/workouts/workoutSlice";
-import { updateWorkout } from "../features/workouts/workoutSlice";
+import {
+    selectWorkout,
+    updateWorkout,
+} from "../features/workouts/workoutSlice";
+import {
+    useAddNewWorkoutMutation,
+    useAddNewWorkoutExercisesMutation,
+} from "../features/workouts/workoutsApiSlice";
 import moment from "moment";
 
 const Workout = () => {
@@ -13,6 +19,18 @@ const Workout = () => {
     const workout = useSelector(selectWorkout);
     const exerciseListmodalRef = useRef(null);
     const navigate = useNavigate();
+
+    const [addNewWorkout, { isLoading: isAddWorkoutLoading }] =
+        useAddNewWorkoutMutation();
+    const [addNewWorkoutExercises, { isLoading: isAddWorkoutExerciseLoading }] =
+        useAddNewWorkoutExercisesMutation();
+
+    const isLoading = isAddWorkoutLoading || isAddWorkoutExerciseLoading;
+    const canSubmit =
+        workout.exercises.length !== 0 &&
+        !isAddWorkoutLoading &&
+        !isAddWorkoutExerciseLoading &&
+        !workout.exercises.some((ex) => ex.errors);
 
     useEffect(() => {
         if (workout.start === null) {
@@ -27,7 +45,7 @@ const Workout = () => {
     const onWorkoutCancel = () => {
         const freshWorkout = {
             name: "New workout",
-            note: null,
+            note: "",
             start: null,
             end: null,
             isTemplate: false,
@@ -57,6 +75,35 @@ const Workout = () => {
         dispatch(updateWorkout(updatedWorkout));
     };
 
+    const onFinishClicked = async () => {
+        if (
+            workout.exercises.length !== 0 &&
+            workout.exercises.filter((ex) => ex.sets.some((set) => set.done))
+                .length !== 0
+        ) {
+            try {
+                const result = await addNewWorkout(workout).unwrap();
+
+                try {
+                    await addNewWorkoutExercises({
+                        workoutId: result.id,
+                        exercises: workout.exercises,
+                    }).unwrap();
+                    onWorkoutCancel();
+                } catch (err) {
+                    console.error(
+                        "Failed to create new workout exercises",
+                        err
+                    );
+                }
+            } catch (err) {
+                console.error("Failed to create new workout", err);
+            }
+        } else {
+            onWorkoutCancel();
+        }
+    };
+
     return (
         <div className="mx-5 mt-5">
             <div className="flex justify-between items-center">
@@ -66,8 +113,15 @@ const Workout = () => {
                     value={workout.name}
                     onChange={(e) => onNameChange(e)}
                 />
-                <button className="btn btn-sm btn-secondary tracking-wider">
-                    FINISH
+                <button
+                    className="btn btn-sm btn-secondary tracking-wider disabled:border-secondary disabled:text-slate-400"
+                    onClick={() => onFinishClicked()}
+                    disabled={!canSubmit}
+                >
+                    FINISH{" "}
+                    {isLoading && (
+                        <span className="loading loading-spinner loading-sm"></span>
+                    )}
                 </button>
             </div>
             <div className="mt-2 text-lg font-semibold">

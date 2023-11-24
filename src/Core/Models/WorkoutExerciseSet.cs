@@ -28,6 +28,9 @@ namespace Core.Models
         [Required(ErrorMessage = "Order is a required field.")]
         public int Order { get; set; }
 
+        [Required(ErrorMessage = "Done is a required field.")]
+        public bool Done { get; set; } = false;
+
 
         public Guid WorkoutExerciseId { get; set; }
         public WorkoutExercise WorkoutExercise { get; set; } = null!;

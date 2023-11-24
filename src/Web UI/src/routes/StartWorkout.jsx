@@ -47,7 +47,7 @@ const StartWorkout = () => {
                 <CenterSpinner />
             ) : (
                 <>
-                    {workouts.length == 0 ? (
+                    {workouts && workouts.length == 0 ? (
                         <h1 className="mt-5 text-3xl font-semibold text-center">
                             There are no templates!
                         </h1>

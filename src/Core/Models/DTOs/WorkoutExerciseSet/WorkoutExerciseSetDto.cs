@@ -2,5 +2,5 @@
 
 namespace Core.Models.DTOs.WorkoutExerciseSet
 {
-    public record WorkoutExerciseSetDto(Guid Id, int Reps, decimal Weight, MeasurementType MeasurementType, int Order);
+    public record WorkoutExerciseSetDto(Guid Id, int Reps, decimal Weight, MeasurementType MeasurementType, int Order, bool Done);
 }

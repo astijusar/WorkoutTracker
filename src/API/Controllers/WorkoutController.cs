@@ -67,6 +67,8 @@ namespace API.Controllers
             var user = HttpContext.Items["user"] as User;
 
             var workout = _mapper.Map<Workout>(input);
+            workout.Start = workout.Start?.ToUniversalTime();
+            workout.End = workout.End?.ToUniversalTime();
 
             _repository.Workout.CreateWorkout(user!.Id, workout);
             await _repository.SaveAsync();

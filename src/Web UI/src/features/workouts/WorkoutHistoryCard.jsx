@@ -15,7 +15,7 @@ const WorkoutHistoryCard = ({ workout }) => {
             <div className="card-body p-3">
                 <h2 className="card-title leading-none">{name}</h2>
                 <h5 className="text-sm text-gray-400">
-                    {moment(start).format("MMMM d")}
+                    {moment(end).format("MMMM D")}
                 </h5>
                 <div className="mt-2 flex items-center">
                     <svg
