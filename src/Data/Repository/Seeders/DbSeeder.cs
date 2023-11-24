@@ -58,6 +58,8 @@ namespace Data.Repository.Seeders
                 Name = "demoWorkout",
                 IsTemplate = false,
                 User = demoUser,
+                Start = new DateTime(2023, 11, 24, 14, 0, 0, DateTimeKind.Utc),
+                End = new DateTime(2023, 11, 24, 15, 5, 34, DateTimeKind.Utc),
                 Exercises = new List<WorkoutExercise>
                 {
                     new()

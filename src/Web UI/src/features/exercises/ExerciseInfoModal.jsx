@@ -1,3 +1,5 @@
+import Markdown from "react-markdown";
+
 const ExerciseInfoModal = ({ exercise, modalRef }) => {
     return (
         <dialog ref={modalRef} className="modal">
@@ -15,9 +17,9 @@ const ExerciseInfoModal = ({ exercise, modalRef }) => {
                 </div>
                 <h3 className="font-bold text-xl p-3">Instructions</h3>
                 {exercise.instructions ? (
-                    <p className="px-3 pb-3 whitespace-pre-line">
+                    <Markdown className="px-5 mb-3 space-y-3">
                         {exercise.instructions}
-                    </p>
+                    </Markdown>
                 ) : (
                     <p className="ps-3 mb-3 font-thin">
                         There are no instructions.
