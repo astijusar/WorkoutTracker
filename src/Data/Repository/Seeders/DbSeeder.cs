@@ -26,11 +26,16 @@ namespace Data.Repository.Seeders
 
         private async Task AddExercises()
         {
-            if (_context.Exercises.Any())
-                return;
+            var existingExerciseNames = _context.Exercises.Select(e => e.Name).ToList();
+            var newExercises = ExerciseConstants.Exercises
+                .Where(exercise => !existingExerciseNames.Contains(exercise.Name))
+                .ToList();
 
-            await _context.Exercises.AddRangeAsync(ExerciseConstants.Exercises);
-            await _context.SaveChangesAsync();
+            if (newExercises.Any())
+            {
+                await _context.Exercises.AddRangeAsync(newExercises);
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task AddDemoWorkout()
