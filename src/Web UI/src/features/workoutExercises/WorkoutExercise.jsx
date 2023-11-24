@@ -173,8 +173,16 @@ const WorkoutExercise = ({ exercise }) => {
                 </tbody>
             </table>
             <div>
-                {weightError && <div className="text-error">{weightError}</div>}
-                {repsError && <div className="text-error">{repsError}</div>}
+                {weightError && (
+                    <div className="mt-2 text-error text-center">
+                        {weightError}
+                    </div>
+                )}
+                {repsError && (
+                    <div className="mt-2 text-error text-center">
+                        {repsError}
+                    </div>
+                )}
             </div>
             <div className="flex justify-center">
                 <button
