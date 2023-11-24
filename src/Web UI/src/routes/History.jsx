@@ -18,7 +18,7 @@ const History = () => {
             <>
                 <div className="mt-7 flex justify-between">
                     <h5 className="text-sm text-gray-400 tracking-widest">
-                        {moment(workouts[0].start).format("MMMM").toUpperCase()}
+                        {moment(workouts[0].end).format("MMMM").toUpperCase()}
                     </h5>
                     <h5 className="text-sm text-gray-400">
                         {pagination.totalCount}{" "}

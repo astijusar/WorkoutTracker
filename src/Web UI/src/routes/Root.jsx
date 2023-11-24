@@ -10,6 +10,6 @@ const Root = () => {
             <BottomNav />
         </>
     );
-}
+};
 
 export default Root;

@@ -26,11 +26,16 @@ namespace Data.Repository.Seeders
 
         private async Task AddExercises()
         {
-            if (_context.Exercises.Any())
-                return;
+            var existingExerciseNames = _context.Exercises.Select(e => e.Name).ToList();
+            var newExercises = ExerciseConstants.Exercises
+                .Where(exercise => !existingExerciseNames.Contains(exercise.Name))
+                .ToList();
 
-            await _context.Exercises.AddRangeAsync(ExerciseConstants.Exercises);
-            await _context.SaveChangesAsync();
+            if (newExercises.Any())
+            {
+                await _context.Exercises.AddRangeAsync(newExercises);
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task AddDemoWorkout()
@@ -53,6 +58,8 @@ namespace Data.Repository.Seeders
                 Name = "demoWorkout",
                 IsTemplate = false,
                 User = demoUser,
+                Start = new DateTime(2023, 11, 24, 14, 0, 0, DateTimeKind.Utc),
+                End = new DateTime(2023, 11, 24, 15, 5, 34, DateTimeKind.Utc),
                 Exercises = new List<WorkoutExercise>
                 {
                     new()
@@ -72,6 +79,50 @@ namespace Data.Repository.Seeders
                             {
                                 Order = 2,
                                 Reps = 10,
+                                Weight = 30,
+                                MeasurementType = MeasurementType.Kilograms
+                            }
+                        }
+                    },
+                    new()
+                    {
+                        ExerciseId = ExerciseConstants.GetExerciseId(1),
+                        Order = 2,
+                        Sets = new List<WorkoutExerciseSet>
+                        {
+                            new()
+                            {
+                                Order = 1,
+                                Reps = 20,
+                                Weight = 5,
+                                MeasurementType = MeasurementType.Kilograms
+                            },
+                            new()
+                            {
+                                Order = 2,
+                                Reps = 15,
+                                Weight = 5,
+                                MeasurementType = MeasurementType.Kilograms
+                            }
+                        }
+                    },
+                    new()
+                    {
+                        ExerciseId = ExerciseConstants.GetExerciseId(4),
+                        Order = 3,
+                        Sets = new List<WorkoutExerciseSet>
+                        {
+                            new()
+                            {
+                                Order = 1,
+                                Reps = 10,
+                                Weight = 12,
+                                MeasurementType = MeasurementType.Kilograms
+                            },
+                            new()
+                            {
+                                Order = 2,
+                                Reps = 2,
                                 Weight = 30,
                                 MeasurementType = MeasurementType.Kilograms
                             }

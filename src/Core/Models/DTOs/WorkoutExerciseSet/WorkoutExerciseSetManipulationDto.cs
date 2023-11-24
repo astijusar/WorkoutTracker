@@ -14,6 +14,9 @@ namespace Core.Models.DTOs.WorkoutExerciseSet
         [Range(1, 100000, ErrorMessage = "Weight is a required field and it needs to be between 1 and 100000.")]
         public decimal Weight { get; init; }
 
+        [Required]
+        public bool Done { get; init; }
+
         public MeasurementType MeasurementType { get; init; }
     }
 }

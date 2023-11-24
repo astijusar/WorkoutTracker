@@ -1,8 +1,11 @@
 import { useDispatch } from "react-redux";
 import { removeExercise, updateExercise } from "../workouts/workoutSlice";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const WorkoutExercise = ({ exercise }) => {
+    const [weightError, setWeightError] = useState(null);
+    const [repsError, setRepsError] = useState(null);
+
     const dispatch = useDispatch();
     const deletionWarningModalRef = useRef(null);
 
@@ -12,24 +15,56 @@ const WorkoutExercise = ({ exercise }) => {
 
     const onWeightChange = (index, e) => {
         const newWeight = e.target.value;
-        const updatedExercise = {
-            ...exercise,
-            sets: exercise.sets.map((set, i) =>
-                i === index ? { ...set, weight: newWeight } : set
-            ),
-        };
-        dispatch(updateExercise(updatedExercise));
+
+        let parsedWeight = parseFloat(newWeight);
+        if (!isNaN(parsedWeight) && parsedWeight >= 0 && parsedWeight <= 1000) {
+            setWeightError(null);
+            const updatedExercise = {
+                ...exercise,
+                sets: exercise.sets.map((set, i) =>
+                    i === index ? { ...set, weight: parsedWeight } : set
+                ),
+                errors: false,
+            };
+            dispatch(updateExercise(updatedExercise));
+        } else {
+            setWeightError("Weight must be a valid number between 0 and 1000");
+            const updatedExercise = {
+                ...exercise,
+                sets: exercise.sets.map((set, i) =>
+                    i === index ? { ...set, weight: parsedWeight } : set
+                ),
+                errors: true,
+            };
+            dispatch(updateExercise(updatedExercise));
+        }
     };
 
     const onRepsChange = (index, e) => {
         const newReps = e.target.value;
-        const updatedExercise = {
-            ...exercise,
-            sets: exercise.sets.map((set, i) =>
-                i === index ? { ...set, reps: newReps } : set
-            ),
-        };
-        dispatch(updateExercise(updatedExercise));
+
+        let parsedReps = parseInt(newReps);
+        if (!isNaN(parsedReps) && parsedReps >= 0 && parsedReps <= 1000) {
+            setRepsError(null);
+            const updatedExercise = {
+                ...exercise,
+                sets: exercise.sets.map((set, i) =>
+                    i === index ? { ...set, reps: parsedReps } : set
+                ),
+                errors: false,
+            };
+            dispatch(updateExercise(updatedExercise));
+        } else {
+            setRepsError("Reps must be a valid number between 0 and 1000");
+            const updatedExercise = {
+                ...exercise,
+                sets: exercise.sets.map((set, i) =>
+                    i === index ? { ...set, reps: parsedReps } : set
+                ),
+                errors: true,
+            };
+            dispatch(updateExercise(updatedExercise));
+        }
     };
 
     const onSetDone = (index, e) => {
@@ -92,9 +127,8 @@ const WorkoutExercise = ({ exercise }) => {
                 <thead>
                     <tr className="font-medium tracking-widest text-slate-200">
                         <th>SET</th>
-                        <th>PREVIOUS</th>
-                        <th>KG</th>
-                        <th>REPS</th>
+                        <th className="ps-8">KG</th>
+                        <th className="ps-6">REPS</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -104,16 +138,13 @@ const WorkoutExercise = ({ exercise }) => {
                             <td className="font-semibold text-lg">
                                 {index + 1}
                             </td>
-                            <td>
-                                {10} kg x {10}
-                            </td>
                             <td className="font-semibold text-lg ps-0">
                                 <input
                                     type="number"
                                     min="0"
+                                    max="1000"
                                     step="0.1"
-                                    placeholder="0"
-                                    className="input w-16 h-8 text-center placeholder:font-semibold placeholder:text-md placeholder:text-slate-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    className="input w-20 h-8 text-center placeholder:font-semibold placeholder:text-md placeholder:text-slate-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     value={set.weight}
                                     onChange={(e) => onWeightChange(index, e)}
                                 />
@@ -122,9 +153,9 @@ const WorkoutExercise = ({ exercise }) => {
                                 <input
                                     type="number"
                                     min="0"
+                                    max="1000"
                                     step="0.1"
-                                    placeholder="0"
-                                    className="input w-16 h-8 text-center placeholder:font-semibold placeholder:text-md placeholder:text-slate-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    className="input w-20 h-8 text-center placeholder:font-semibold placeholder:text-md placeholder:text-slate-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     value={set.reps}
                                     onChange={(e) => onRepsChange(index, e)}
                                 />
@@ -141,6 +172,10 @@ const WorkoutExercise = ({ exercise }) => {
                     ))}
                 </tbody>
             </table>
+            <div>
+                {weightError && <div className="text-error">{weightError}</div>}
+                {repsError && <div className="text-error">{repsError}</div>}
+            </div>
             <div className="flex justify-center">
                 <button
                     className="btn btn-ghost font-medium tracking-widest text-success"

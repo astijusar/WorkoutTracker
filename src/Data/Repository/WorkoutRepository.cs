@@ -27,7 +27,7 @@ namespace Data.Repository
             var workoutsCount = query.Count();
 
             var workouts = await query
-                .Sort(e => e.Name, param.SortDescending)
+                .Sort(e => e.End, param.SortDescending)
                 .Skip((param.PageNumber - 1) * param.PageSize)
                 .Take(param.PageSize)
                 .Include(w => w.Exercises)

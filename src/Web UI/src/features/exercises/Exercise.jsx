@@ -19,6 +19,7 @@ const Exercise = ({ exercise, addButton = false, listModalRef = null }) => {
                 id: workoutExerciseCount + 1,
                 exerciseId: exercise.id,
                 name: exercise.name,
+                errors: false,
             })
         );
 
@@ -34,7 +35,11 @@ const Exercise = ({ exercise, addButton = false, listModalRef = null }) => {
                 className="flex me-5 hover:cursor-pointer"
             >
                 <div
-                    className="flex items-center p-2 ms-2 gap-3"
+                    className={
+                        addButton && listModalRef
+                            ? "flex items-center p-2 ms-2 gap-3"
+                            : "flex items-center p-2 ms-2 gap-3 w-full"
+                    }
                     onClick={() => modalRef.current.showModal()}
                 >
                     <div className="avatar">
