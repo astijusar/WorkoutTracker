@@ -147,7 +147,7 @@ namespace Data.Repository.Seeders
             },
             new Exercise
             {
-                Id = new Guid("3b289a3a-5fbf-482a-9c6a-9d6a3b8ffef2"),
+                Id = Guid.NewGuid(),
                 Name = "Deadlift",
                 MuscleGroup = MuscleGroup.LowerBack,
                 EquipmentType = Equipment.Barbell,
@@ -163,7 +163,7 @@ namespace Data.Repository.Seeders
             },
             new Exercise
             {
-                Id = new Guid("db66c651-2a49-4a62-a2d4-70eb12d5b9ab"),
+                Id = Guid.NewGuid(),
                 Name = "Leg Press",
                 MuscleGroup = MuscleGroup.Quadriceps,
                 EquipmentType = Equipment.Machine,
@@ -178,7 +178,7 @@ namespace Data.Repository.Seeders
             },
             new Exercise
             {
-                Id = new Guid("4c9cc682-4f6d-4d0b-9e0f-1c9fe13b47dd"),
+                Id = Guid.NewGuid(),
                 Name = "Plank",
                 MuscleGroup = MuscleGroup.Abdominals,
                 EquipmentType = Equipment.Bodyweight,
