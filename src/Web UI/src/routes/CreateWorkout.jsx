@@ -37,6 +37,10 @@ const CreateWorkout = () => {
             const updatedWorkout = {
                 ...workout,
                 start: moment().format(),
+                isTemplate: false,
+                exercises: [],
+                note: "",
+                name: "New Workout",
             };
             dispatch(updateWorkout(updatedWorkout));
         }

@@ -26,14 +26,11 @@ const WorkoutTemplateCard = ({ workout }) => {
                                 <a>Edit</a>
                             </li>
                             <li>
-                                <a>Delete</a>
+                                <a className="text-error">Delete</a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <h5 className="text-sm text-gray-400">
-                    Last performed: 2 days ago
-                </h5>
                 <div className="leading-none">
                     {workout.workoutExercises.map((exercise) => (
                         <h5 key={exercise.id} className="text-sm text-gray-400">

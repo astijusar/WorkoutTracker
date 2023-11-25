@@ -36,6 +36,9 @@ const WorkoutHistoryCard = ({ workout }) => {
                             <li>
                                 <a>Edit</a>
                             </li>
+                            <li>
+                                <a className="text-error">Delete</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
