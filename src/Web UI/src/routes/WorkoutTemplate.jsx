@@ -82,15 +82,17 @@ const WorkoutTemplate = () => {
                 )}
             </div>
             <dialog ref={errorModalRef} className="modal">
-                <div className="modal-box p-0">
+                <div className="modal-box p-5 h-32 w-full">
                     <form method="dialog">
                         <button className="btn btn-sm btn-circle btn-ghost p-3 absolute right-2 top-2">
                             ✕
                         </button>
                     </form>
-                    <h3 className="text-error">
-                        Become a premium user to have more than three tempaltes!
-                    </h3>
+                    <div className="flex justify-center items-center h-full">
+                        <p className="text-error text-lg font-semibold">
+                            Become a premium user to have more than 3 templates!
+                        </p>
+                    </div>
                 </div>
                 <form method="dialog" className="modal-backdrop">
                     <button>close</button>

@@ -1,14 +1,24 @@
 import moment from "moment";
 import BestSet from "./BestSet";
+import { useDeleteWorkoutMutation } from "./workoutsApiSlice";
 
 const WorkoutHistoryCard = ({ workout }) => {
     const { name, start, end, workoutExercises } = workout;
+    const [deleteWorkout] = useDeleteWorkoutMutation();
 
     const duration = moment.duration(moment(end).diff(moment(start)));
     const durationString =
         duration.asHours() < 1
             ? `${duration.minutes()}m`
             : `${duration.hours()}h ${duration.minutes()}m`;
+
+    const onDeleteClicked = async () => {
+        try {
+            await deleteWorkout({ id: workout.id }).unwrap();
+        } catch {
+            console.error("Failed to delete the workout");
+        }
+    };
 
     return (
         <div className="card border border-gray-400">
@@ -37,7 +47,12 @@ const WorkoutHistoryCard = ({ workout }) => {
                                 <a>Edit</a>
                             </li>
                             <li>
-                                <a className="text-error">Delete</a>
+                                <a
+                                    className="text-error"
+                                    onClick={() => onDeleteClicked()}
+                                >
+                                    Delete
+                                </a>
                             </li>
                         </ul>
                     </div>

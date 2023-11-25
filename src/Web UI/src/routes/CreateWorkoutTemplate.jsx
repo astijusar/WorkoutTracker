@@ -84,6 +84,7 @@ const CreateWorkoutTempalte = () => {
                     await addNewWorkoutExercises({
                         workoutId: result.id,
                         exercises: workout.exercises,
+                        isTemplate: true,
                     }).unwrap();
                     onCancel();
                 } catch (err) {

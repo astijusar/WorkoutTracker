@@ -1,4 +1,16 @@
+import { useDeleteWorkoutMutation } from "./workoutsApiSlice.js";
+
 const WorkoutTemplateCard = ({ workout }) => {
+    const [deleteTemplate] = useDeleteWorkoutMutation();
+
+    const onDeleteClicked = async () => {
+        try {
+            await deleteTemplate({ id: workout.id }).unwrap();
+        } catch (err) {
+            console.error("Failed to delete the workout template");
+        }
+    };
+
     return (
         <div className="card border border-gray-400">
             <div className="card-body p-3">
@@ -26,7 +38,12 @@ const WorkoutTemplateCard = ({ workout }) => {
                                 <a>Edit</a>
                             </li>
                             <li>
-                                <a className="text-error">Delete</a>
+                                <a
+                                    className="text-error"
+                                    onClick={() => onDeleteClicked()}
+                                >
+                                    Delete
+                                </a>
                             </li>
                         </ul>
                     </div>

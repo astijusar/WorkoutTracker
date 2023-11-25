@@ -51,6 +51,7 @@ const workoutApiSlice = apiSlice.injectEndpoints({
                     isTemplate: true,
                 },
             }),
+            invalidatesTags: [{ type: "Workout", id: "PARTIAL-LIST" }],
         }),
         addNewWorkoutExercises: builder.mutation({
             query: (request) => {
@@ -76,6 +77,38 @@ const workoutApiSlice = apiSlice.injectEndpoints({
             },
             invalidatesTags: [{ type: "Workout", id: "PARTIAL-LIST" }],
         }),
+        deleteWorkout: builder.mutation({
+            query: ({ id }) => ({
+                url: `workout/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: (result, error, id) => [
+                { type: "Workout", id },
+                { type: "Workout", id: "PARTIAL-LIST" },
+            ],
+            onQueryStarted: async ({ id }, { dispatch, queryFulfilled }) => {
+                const deleteResult = dispatch(
+                    workoutApiSlice.util.updateQueryData(
+                        "getWorkouts",
+                        null,
+                        (draft) => {
+                            const index = draft.data.findIndex(
+                                (workout) => workout.id === id
+                            );
+                            if (index !== -1) {
+                                draft.data.splice(index, 1);
+                            }
+                        }
+                    )
+                );
+
+                try {
+                    await queryFulfilled;
+                } catch {
+                    deleteResult.undo();
+                }
+            },
+        }),
     }),
 });
 
@@ -84,4 +117,5 @@ export const {
     useAddNewWorkoutMutation,
     useAddNewWorkoutTemplateMutation,
     useAddNewWorkoutExercisesMutation,
+    useDeleteWorkoutMutation,
 } = workoutApiSlice;
