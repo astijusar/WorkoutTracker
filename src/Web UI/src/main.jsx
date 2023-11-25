@@ -15,6 +15,7 @@ import Login from "./routes/Login.jsx";
 import RequireAuth from "./features/auth/RequireAuth.jsx";
 import Register from "./routes/Register.jsx";
 import CreateWorkoutTempalte from "./routes/CreateWorkoutTemplate.jsx";
+import { Analytics } from "@vercel/analytics/react";
 
 const router = createBrowserRouter([
     {
@@ -70,6 +71,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <Provider store={store}>
             <RouterProvider router={router} />
+            <Analytics />
         </Provider>
     </React.StrictMode>
 );
