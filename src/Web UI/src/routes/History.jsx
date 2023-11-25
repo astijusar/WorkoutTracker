@@ -7,11 +7,8 @@ import moment from "moment";
 const History = () => {
     const [page, setPage] = useState(1);
 
-    const {
-        data: { data: workouts, pagination } = {},
-        isLoading,
-        isFetching,
-    } = useGetWorkoutsQuery({ pageNumber: page, template: false });
+    const { data: { data: workouts, pagination } = {}, isLoading } =
+        useGetWorkoutsQuery({ pageNumber: page, template: false });
 
     const content =
         workouts && workouts.length !== 0 ? (
@@ -36,7 +33,7 @@ const History = () => {
     return (
         <div className="mx-5">
             <h1 className="mt-5 text-5xl font-semibold">History</h1>
-            {isLoading || isFetching ? <CenterSpinner /> : content}
+            {isLoading ? <CenterSpinner /> : content}
         </div>
     );
 };

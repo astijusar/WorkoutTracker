@@ -1,6 +1,12 @@
 import { useDeleteWorkoutMutation } from "./workoutsApiSlice.js";
+import { updateWorkout } from "./workoutSlice.js";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const WorkoutTemplateCard = ({ workout }) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [deleteTemplate] = useDeleteWorkoutMutation();
 
     const onDeleteClicked = async () => {
@@ -9,6 +15,29 @@ const WorkoutTemplateCard = ({ workout }) => {
         } catch (err) {
             console.error("Failed to delete the workout template");
         }
+    };
+
+    const onPerformClicked = () => {
+        const workoutToPerform = {
+            name: workout.name,
+            note: workout.note,
+            start: moment().format(),
+            end: null,
+            isTemplate: false,
+            exercises: workout.workoutExercises.map((exercise, index) => ({
+                id: index + 1,
+                exerciseId: exercise.exercise.id,
+                name: exercise.exercise.name,
+                sets: exercise.sets.map((set) => ({
+                    reps: set.reps,
+                    weight: set.weight,
+                    done: set.done,
+                })),
+                errors: false,
+            })),
+        };
+        dispatch(updateWorkout(workoutToPerform));
+        navigate(`/create-workout`);
     };
 
     return (
@@ -32,7 +61,9 @@ const WorkoutTemplateCard = ({ workout }) => {
                             className="dropdown-content z-[1] menu p-2 shadow bg-neutral border border-gray-400 rounded-lg w-40 font-semibold"
                         >
                             <li>
-                                <a>Perform</a>
+                                <a onClick={() => onPerformClicked()}>
+                                    Perform
+                                </a>
                             </li>
                             <li>
                                 <a>Edit</a>
@@ -49,11 +80,21 @@ const WorkoutTemplateCard = ({ workout }) => {
                     </div>
                 </div>
                 <div className="leading-none">
-                    {workout.workoutExercises.map((exercise) => (
-                        <h5 key={exercise.id} className="text-sm text-gray-400">
-                            {`${exercise.sets.length} x ${exercise.exercise.name}`}
-                        </h5>
-                    ))}
+                    {workout.workoutExercises
+                        .map((exercise) => ({
+                            ...exercise,
+                            sets: [...exercise.sets].sort(
+                                (a, b) => a.order - b.order
+                            ),
+                        }))
+                        .map((exercise) => (
+                            <h5
+                                key={exercise.id}
+                                className="text-sm text-gray-400"
+                            >
+                                {`${exercise.sets.length} x ${exercise.exercise.name}`}
+                            </h5>
+                        ))}
                 </div>
             </div>
         </div>

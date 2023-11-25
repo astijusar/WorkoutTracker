@@ -1,10 +1,15 @@
 import moment from "moment";
 import BestSet from "./BestSet";
 import { useDeleteWorkoutMutation } from "./workoutsApiSlice";
+import { useDispatch } from "react-redux";
+import { updateWorkout } from "./workoutSlice";
+import { useNavigate } from "react-router-dom";
 
 const WorkoutHistoryCard = ({ workout }) => {
-    const { name, start, end, workoutExercises } = workout;
+    const { name, note, start, end, workoutExercises } = workout;
     const [deleteWorkout] = useDeleteWorkoutMutation();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const duration = moment.duration(moment(end).diff(moment(start)));
     const durationString =
@@ -18,6 +23,29 @@ const WorkoutHistoryCard = ({ workout }) => {
         } catch {
             console.error("Failed to delete the workout");
         }
+    };
+
+    const onPerformClicked = () => {
+        const workoutToPerform = {
+            name: name,
+            note: note,
+            start: moment().format(),
+            end: null,
+            isTemplate: false,
+            exercises: workoutExercises.map((exercise, index) => ({
+                id: index + 1,
+                exerciseId: exercise.exercise.id,
+                name: exercise.exercise.name,
+                sets: exercise.sets.map((set) => ({
+                    reps: set.reps,
+                    weight: set.weight,
+                    done: set.done,
+                })),
+                errors: false,
+            })),
+        };
+        dispatch(updateWorkout(workoutToPerform));
+        navigate(`/create-workout`);
     };
 
     return (
@@ -41,7 +69,9 @@ const WorkoutHistoryCard = ({ workout }) => {
                             className="dropdown-content z-[1] menu p-2 shadow bg-neutral border border-gray-400 rounded-lg w-40 font-semibold"
                         >
                             <li>
-                                <a>Perform again</a>
+                                <a onClick={() => onPerformClicked()}>
+                                    Perform again
+                                </a>
                             </li>
                             <li>
                                 <a>Edit</a>
@@ -84,16 +114,23 @@ const WorkoutHistoryCard = ({ workout }) => {
                     </h2>
                 </div>
                 <div className="leading-none">
-                    {workoutExercises.map((ex) => (
-                        <div key={ex.id} className="flex justify-between">
-                            <h5 className="text-sm text-gray-400">
-                                {ex.sets.length} x {ex.exercise.name}
-                            </h5>
-                            <h5 className="text-sm text-gray-400">
-                                <BestSet exercise={ex} />
-                            </h5>
-                        </div>
-                    ))}
+                    {workoutExercises
+                        .map((exercise) => ({
+                            ...exercise,
+                            sets: [...exercise.sets].sort(
+                                (a, b) => a.order - b.order
+                            ),
+                        }))
+                        .map((ex) => (
+                            <div key={ex.id} className="flex justify-between">
+                                <h5 className="text-sm text-gray-400">
+                                    {ex.sets.length} x {ex.exercise.name}
+                                </h5>
+                                <h5 className="text-sm text-gray-400">
+                                    <BestSet exercise={ex} />
+                                </h5>
+                            </div>
+                        ))}
                 </div>
             </div>
         </div>

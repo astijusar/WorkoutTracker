@@ -12,11 +12,8 @@ const WorkoutTemplate = () => {
     const navigate = useNavigate();
     const errorModalRef = useRef(null);
 
-    const {
-        data: { data: templates, pagination } = {},
-        isLoading,
-        isFetching,
-    } = useGetWorkoutsQuery({ pageNumber: page, template: true });
+    const { data: { data: templates, pagination } = {}, isLoading } =
+        useGetWorkoutsQuery({ pageNumber: page, template: true });
 
     const onNewTemplateClicked = () => {
         if (Array.isArray(userRoles)) {
@@ -67,7 +64,7 @@ const WorkoutTemplate = () => {
                         />
                     </svg>
                 </div>
-                {isLoading || isFetching ? (
+                {isLoading ? (
                     <CenterSpinner />
                 ) : (
                     <>

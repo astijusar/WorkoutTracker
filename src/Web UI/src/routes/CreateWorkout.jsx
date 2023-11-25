@@ -2,7 +2,7 @@ import AddWorkoutExerciseModal from "../features/workouts/AddWorkoutExerciseModa
 import WorkoutExercise from "../features/workoutExercises/WorkoutExercise";
 import Stopwatch from "../features/workouts/Stopwatch";
 import { useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
     selectWorkout,
@@ -15,6 +15,7 @@ import {
 import moment from "moment";
 
 const CreateWorkout = () => {
+    const { id } = useParams();
     const dispatch = useDispatch();
     const workout = useSelector(selectWorkout);
     const exerciseListmodalRef = useRef(null);
@@ -32,8 +33,10 @@ const CreateWorkout = () => {
         !isAddWorkoutExerciseLoading &&
         !workout.exercises.some((ex) => ex.errors);
 
+    const isWorkoutUpdate = id !== undefined;
+
     useEffect(() => {
-        if (workout.start === null) {
+        if (workout.start === null && !isWorkoutUpdate) {
             const updatedWorkout = {
                 ...workout,
                 start: moment().format(),
