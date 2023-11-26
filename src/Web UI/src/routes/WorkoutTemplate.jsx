@@ -51,15 +51,17 @@ const WorkoutTemplate = () => {
         } else if (isLoading) {
             return <CenterSpinner />;
         } else {
-            <>
-                {templates && templates.length == 0 ? (
-                    <h1 className="mt-5 text-3xl font-semibold text-center">
-                        There are no templates!
-                    </h1>
-                ) : (
-                    <WorkoutTemplateList workouts={templates} />
-                )}
-            </>;
+            return (
+                <>
+                    {templates && templates.length === 0 ? (
+                        <h1 className="mt-5 text-3xl font-semibold text-center">
+                            There are no templates!
+                        </h1>
+                    ) : (
+                        <WorkoutTemplateList workouts={templates} />
+                    )}
+                </>
+            );
         }
     };
 
