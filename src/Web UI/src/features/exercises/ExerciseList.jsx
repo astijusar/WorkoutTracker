@@ -2,7 +2,7 @@ import Exercise from "./Exercise";
 
 const ExerciseList = ({ exercises, filter = true, addButton = false }) => {
     return (
-        <>
+        <div className={filter ? "" : "mt-5"}>
             {filter && (
                 <div className="flex justify-end">
                     <svg
@@ -24,7 +24,7 @@ const ExerciseList = ({ exercises, filter = true, addButton = false }) => {
                     <Exercise key={ex.id} exercise={ex} addButton={addButton} />
                 ))}
             </div>
-        </>
+        </div>
     );
 };
 

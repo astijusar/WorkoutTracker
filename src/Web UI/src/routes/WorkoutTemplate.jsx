@@ -12,10 +12,15 @@ const WorkoutTemplate = () => {
     const navigate = useNavigate();
     const errorModalRef = useRef(null);
 
-    const { data: { data: templates, pagination } = {}, isLoading } =
-        useGetWorkoutsQuery({ pageNumber: page, template: true });
+    const {
+        data: { data: templates, pagination } = {},
+        isLoading,
+        isError,
+    } = useGetWorkoutsQuery({ pageNumber: page, template: true });
 
     const onNewTemplateClicked = () => {
+        if (isLoading || isError) return;
+
         if (Array.isArray(userRoles)) {
             if (userRoles.includes("PremiumUser")) {
                 navigate("/create-template");
@@ -33,6 +38,31 @@ const WorkoutTemplate = () => {
         }
     };
 
+    const Content = () => {
+        if (isError) {
+            return (
+                <div className="mt-10">
+                    <h5 className="text-3xl font-medium text-center">
+                        Could not reach the server!
+                    </h5>
+                    <p className="mt-2 text-center text-xl">Try again later!</p>
+                </div>
+            );
+        } else if (isLoading) {
+            return <CenterSpinner />;
+        } else {
+            <>
+                {templates && templates.length == 0 ? (
+                    <h1 className="mt-5 text-3xl font-semibold text-center">
+                        There are no templates!
+                    </h1>
+                ) : (
+                    <WorkoutTemplateList workouts={templates} />
+                )}
+            </>;
+        }
+    };
+
     return (
         <>
             <div className="mx-5">
@@ -41,8 +71,9 @@ const WorkoutTemplate = () => {
                     QUICK START
                 </h5>
                 <button
-                    className="mt-3 w-full btn btn-secondary tracking-widest text-white"
+                    className="mt-3 w-full btn btn-secondary tracking-widest text-white disabled:bg-secondary disabled:opacity-50 disabled:text-slate-200"
                     onClick={() => navigate("/create-workout")}
+                    disabled={isLoading || isError}
                 >
                     START AN EMPTY WORKOUT
                 </button>
@@ -64,19 +95,7 @@ const WorkoutTemplate = () => {
                         />
                     </svg>
                 </div>
-                {isLoading ? (
-                    <CenterSpinner />
-                ) : (
-                    <>
-                        {templates && templates.length == 0 ? (
-                            <h1 className="mt-5 text-3xl font-semibold text-center">
-                                There are no templates!
-                            </h1>
-                        ) : (
-                            <WorkoutTemplateList workouts={templates} />
-                        )}
-                    </>
-                )}
+                <Content />
             </div>
             <dialog ref={errorModalRef} className="modal">
                 <div className="modal-box p-5 h-32 w-full">

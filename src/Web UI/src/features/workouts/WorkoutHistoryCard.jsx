@@ -74,9 +74,6 @@ const WorkoutHistoryCard = ({ workout }) => {
                                 </a>
                             </li>
                             <li>
-                                <a>Edit</a>
-                            </li>
-                            <li>
                                 <a
                                     className="text-error"
                                     onClick={() => onDeleteClicked()}
@@ -114,23 +111,16 @@ const WorkoutHistoryCard = ({ workout }) => {
                     </h2>
                 </div>
                 <div className="leading-none">
-                    {workoutExercises
-                        .map((exercise) => ({
-                            ...exercise,
-                            sets: [...exercise.sets].sort(
-                                (a, b) => a.order - b.order
-                            ),
-                        }))
-                        .map((ex) => (
-                            <div key={ex.id} className="flex justify-between">
-                                <h5 className="text-sm text-gray-400">
-                                    {ex.sets.length} x {ex.exercise.name}
-                                </h5>
-                                <h5 className="text-sm text-gray-400">
-                                    <BestSet exercise={ex} />
-                                </h5>
-                            </div>
-                        ))}
+                    {workoutExercises.map((ex) => (
+                        <div key={ex.id} className="flex justify-between">
+                            <h5 className="text-sm text-gray-400">
+                                {ex.sets.length} x {ex.exercise.name}
+                            </h5>
+                            <h5 className="text-sm text-gray-400">
+                                <BestSet exercise={ex} />
+                            </h5>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

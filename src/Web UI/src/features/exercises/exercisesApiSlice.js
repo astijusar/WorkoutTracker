@@ -9,13 +9,16 @@ const exercisesApiSlice = apiSlice.injectEndpoints({
                     params,
                 };
             },
-            providesTags: (result, error, arg) => [
-                ...result.data.map((exercise) => ({
-                    type: "Exercise",
-                    id: exercise.id,
-                })),
-                { type: "Exercise", id: "PARTIAL-LIST" },
-            ],
+            providesTags: (result, error, arg) =>
+                result
+                    ? [
+                          ...result.data.map((exercise) => ({
+                              type: "Exercise",
+                              id: exercise.id,
+                          })),
+                          { type: "Exercise", id: "PARTIAL-LIST" },
+                      ]
+                    : [{ type: "Exercise", id: "PARTIAL-LIST" }],
         }),
     }),
 });

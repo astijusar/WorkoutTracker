@@ -79,10 +79,7 @@ namespace API.Controllers
         {
             var exercises = _mapper.Map<IEnumerable<WorkoutExercise>>(input);
 
-            foreach (var exercise in exercises)
-            {
-                await _repository.WorkoutExercise.CreateWorkoutExerciseAsync(workoutId, exercise);
-            }
+            await _repository.WorkoutExercise.CreateWorkoutExercisesAsync(workoutId, exercises.ToList());
 
             await _repository.SaveAsync();
 

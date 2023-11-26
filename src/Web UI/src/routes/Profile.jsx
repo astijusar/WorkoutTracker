@@ -12,16 +12,23 @@ const Profile = () => {
     const {
         data: { data: workouts, pagination } = {},
         isLoading,
-        isFetching,
+        isError,
     } = useGetWorkoutsQuery({ pageSize: 50, template: false });
 
-    return (
-        <div className="mx-5">
-            <SettingsButton />
-            <h1 className="text-5xl font-semibold">Profile</h1>
-            {isLoading || isFetching ? (
-                <CenterSpinner />
-            ) : (
+    const Content = () => {
+        if (isError) {
+            return (
+                <div className="mt-10">
+                    <h5 className="text-3xl font-medium text-center">
+                        Could not reach the server!
+                    </h5>
+                    <p className="mt-2 text-center text-xl">Try again later!</p>
+                </div>
+            );
+        } else if (isLoading) {
+            return <CenterSpinner />;
+        } else {
+            return (
                 <>
                     <div className="mt-5 flex">
                         <svg
@@ -57,7 +64,15 @@ const Profile = () => {
                         <WorkoutBarChart workouts={workouts} />
                     </div>
                 </>
-            )}
+            );
+        }
+    };
+
+    return (
+        <div className="mx-5">
+            <SettingsButton />
+            <h1 className="text-5xl font-semibold">Profile</h1>
+            <Content />
         </div>
     );
 };

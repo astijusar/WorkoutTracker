@@ -29,10 +29,12 @@ namespace Data.Repository
                 .Include(e => e.Sets)
                 .SingleOrDefaultAsync();
 
-        public async Task CreateWorkoutExerciseAsync(Guid workoutId, WorkoutExercise exercise)
+        public async Task CreateWorkoutExercisesAsync(Guid workoutId, IList<WorkoutExercise> exercises)
         {
-            if (exercise.Sets.Any())
+            foreach (var exercise in exercises)
             {
+                if (!exercise.Sets.Any()) continue;
+
                 var n = 1;
 
                 foreach (var set in exercise.Sets)
@@ -46,10 +48,12 @@ namespace Data.Repository
             var currentMaxOrder = await FindBy(e => e.WorkoutId == workoutId, false)
                 .MaxAsync(e => (int?)e.Order) ?? 0;
 
-            exercise.Order = currentMaxOrder + 1;
-            exercise.WorkoutId = workoutId;
-
-            Create(exercise);
+            for (var i = 0; i < exercises.Count; i++)
+            {
+                exercises[i].Order = currentMaxOrder + i + 1;
+                exercises[i].WorkoutId = workoutId;
+                Create(exercises[i]);
+            }
         }
 
         public void DeleteWorkoutExercise(WorkoutExercise exercise)

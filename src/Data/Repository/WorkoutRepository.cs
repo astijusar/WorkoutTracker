@@ -27,7 +27,7 @@ namespace Data.Repository
             var workoutsCount = query.Count();
 
             var workouts = await query
-                .Sort(e => e.End, param.SortDescending)
+                .Sort(w => w.End, param.SortDescending)
                 .Skip((param.PageNumber - 1) * param.PageSize)
                 .Take(param.PageSize)
                 .Include(w => w.Exercises)
@@ -35,6 +35,11 @@ namespace Data.Repository
                 .Include(w => w.Exercises)
                     .ThenInclude(we => we.Sets)
                 .ToListAsync();
+
+            foreach (var workout in workouts)
+            {
+                workout.Exercises = workout.Exercises.OrderBy(e => e.Order).ToList();
+            }
 
             var metadata = new OffsetPaginationMetadata(workoutsCount,
                 param.PageNumber, param.PageSize);
