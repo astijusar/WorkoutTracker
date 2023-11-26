@@ -43,9 +43,11 @@ const History = () => {
                 </>
             );
         } else {
-            <h1 className="mt-10 text-3xl font-medium text-center">
-                No workouts completed!
-            </h1>;
+            return (
+                <h1 className="mt-10 text-3xl font-medium text-center">
+                    No workouts completed!
+                </h1>
+            );
         }
     };
 

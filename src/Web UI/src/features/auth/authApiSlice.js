@@ -8,6 +8,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 method: "POST",
                 body: { ...credentials },
             }),
+            invalidatesTags: [
+                { type: "Workout", id: "PARTIAL-LIST" },
+                { type: "Exercise", id: "PARTIAL-LIST" },
+            ],
         }),
         register: builder.mutation({
             query: (credentials) => ({

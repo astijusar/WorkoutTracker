@@ -1,10 +1,17 @@
 import { useState } from "react";
 import { useGetExercisesQuery } from "../features/exercises/exercisesApiSlice";
+import { selectCurrentUserRoles } from "../features/auth/authSlice";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import CenterSpinner from "../components/CenterSpinner";
 import ExerciseList from "../features/exercises/ExerciseList";
 
 const Exercises = () => {
     const [page, setPage] = useState(1);
+    const userRoles = useSelector(selectCurrentUserRoles);
+    const navigate = useNavigate();
+
+    const isAdmin = userRoles.includes("Admin");
 
     const {
         data: { data: exercises, pagination } = {},
@@ -37,7 +44,18 @@ const Exercises = () => {
 
     return (
         <div className="mx-5">
-            <h1 className="mt-5 text-5xl font-semibold">Exercises</h1>
+            <div className="mt-5 flex justify-between">
+                <h1 className="text-5xl font-semibold">Exercises</h1>
+                {isAdmin && (
+                    <button
+                        className="btn btn-secondary font-bold tracking-widest text-slate-200 disabled:bg-secondary disabled:opacity-50 disabled:text-slate-200"
+                        disabled={isLoading || isError}
+                        onClick={() => navigate("/create-exercise")}
+                    >
+                        Add Exercise
+                    </button>
+                )}
+            </div>
             <Content />
         </div>
     );

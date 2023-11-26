@@ -16,6 +16,8 @@ import RequireAuth from "./features/auth/RequireAuth.jsx";
 import Register from "./routes/Register.jsx";
 import CreateWorkoutTempalte from "./routes/CreateWorkoutTemplate.jsx";
 import { Analytics } from "@vercel/analytics/react";
+import CreateExercise from "./routes/CreateExercise.jsx";
+import RequireAdminRole from "./features/auth/RequireAdminRole.jsx";
 
 const router = createBrowserRouter([
     {
@@ -54,12 +56,21 @@ const router = createBrowserRouter([
                         element: <Exercises />,
                     },
                     {
-                        path: "create-workout/:id?",
+                        path: "create-workout",
                         element: <CreateWorkout />,
                     },
                     {
                         path: "create-template",
                         element: <CreateWorkoutTempalte />,
+                    },
+                    {
+                        element: <RequireAdminRole />,
+                        children: [
+                            {
+                                path: "create-exercise/:id?",
+                                element: <CreateExercise />,
+                            },
+                        ],
                     },
                 ],
             },
@@ -71,7 +82,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <Provider store={store}>
             <RouterProvider router={router} />
-            <Analytics />
+            <Analytics debug={false} />
         </Provider>
     </React.StrictMode>
 );
