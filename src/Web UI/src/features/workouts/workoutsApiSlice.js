@@ -53,6 +53,22 @@ const workoutApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [{ type: "Workout", id: "PARTIAL-LIST" }],
         }),
+        updateWorkoutTemplate: builder.mutation({
+            query: ({ templateId, updatedTemplate }) => ({
+                url: `/workout/${templateId}`,
+                method: "PUT",
+                body: {
+                    name: updatedTemplate.name
+                        ? updatedTemplate.name
+                        : "New Template",
+                    note: updatedTemplate.note,
+                    start: null,
+                    end: null,
+                    isTemplate: true,
+                },
+            }),
+            invalidatesTags: [{ type: "Workout", id: "PARTIAL-LIST" }],
+        }),
         addNewWorkoutExercises: builder.mutation({
             query: (request) => {
                 const body = request.exercises.map((exercise) => ({
@@ -118,4 +134,5 @@ export const {
     useAddNewWorkoutTemplateMutation,
     useAddNewWorkoutExercisesMutation,
     useDeleteWorkoutMutation,
+    useUpdateWorkoutTemplateMutation,
 } = workoutApiSlice;

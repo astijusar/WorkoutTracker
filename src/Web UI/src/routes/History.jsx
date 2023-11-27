@@ -11,7 +11,11 @@ const History = () => {
         data: { data: workouts, pagination } = {},
         isLoading,
         isError,
-    } = useGetWorkoutsQuery({ pageNumber: page, template: false });
+    } = useGetWorkoutsQuery({
+        pageNumber: page,
+        pageSize: 50,
+        template: false,
+    });
 
     const Content = () => {
         if (isError) {

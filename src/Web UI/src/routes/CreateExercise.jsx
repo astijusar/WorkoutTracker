@@ -1,15 +1,52 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import {
+    useGetExerciseByIdQuery,
+    useAddNewExerciseMutation,
+    useUpdateExerciseMutation,
+} from "../features/exercises/exercisesApiSlice";
+import { useEffect } from "react";
 
 const CreateExercise = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const { data: exercise, isLoading: isExerciseLoading } =
+        id !== undefined
+            ? useGetExerciseByIdQuery(id)
+            : { data: null, isLoading: false };
+    const [addNewExercise, { isLoading: isAddExerciseLoading }] =
+        useAddNewExerciseMutation();
+    const [updateExercise, { isLoading: isUpdateExerciseLoading }] =
+        useUpdateExerciseMutation();
+
+    const canSubmit =
+        !isExerciseLoading && !isAddExerciseLoading && !isUpdateExerciseLoading;
+
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+        setValue,
+    } = useForm({
+        defaultValues:
+            id !== undefined
+                ? {
+                      name: exercise?.name,
+                      instructions: exercise?.instructions,
+                      muscleGroup: exercise?.muscleGroup,
+                      equipmentType: exercise?.equipmentType,
+                  }
+                : {},
+    });
+
+    useEffect(() => {
+        if (exercise) {
+            Object.keys(exercise).forEach((key) => {
+                setValue(key, exercise[key]);
+            });
+        }
+    }, [exercise, setValue]);
 
     const muscleGroups = [
         "Biceps",
@@ -42,8 +79,14 @@ const CreateExercise = () => {
         "None",
     ];
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        if (id === undefined) {
+            await addNewExercise(data);
+        } else {
+            await updateExercise({ exerciseId: id, updatedExercise: data });
+        }
+
+        navigate("/exercises");
     };
 
     return (
@@ -60,7 +103,7 @@ const CreateExercise = () => {
                         Exercise name:
                     </label>
                     <input
-                        {...register("exerciseName", { required: true })}
+                        {...register("name", { required: true })}
                         type="text"
                         className="input w-full"
                         id="name"
@@ -123,7 +166,10 @@ const CreateExercise = () => {
                         </select>
                     </div>
                 </div>
-                <button className="btn btn-secondary mt-8 w-full tracking-wider">
+                <button
+                    className="btn btn-secondary mt-8 w-full tracking-wider disabled:border-secondary disabled:text-slate-400"
+                    disabled={!canSubmit}
+                >
                     {id === undefined ? "CREATE EXERCISE" : "UPDATE EXERCISE"}
                 </button>
                 <button

@@ -17,7 +17,7 @@ const Exercises = () => {
         data: { data: exercises, pagination } = {},
         isLoading,
         isError,
-    } = useGetExercisesQuery({ pageNumber: page });
+    } = useGetExercisesQuery({ pageNumber: page, pageSize: 50 });
 
     const Content = () => {
         if (isError) {

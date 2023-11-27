@@ -2,9 +2,12 @@ import { useDeleteWorkoutMutation } from "./workoutsApiSlice.js";
 import { updateWorkout } from "./workoutSlice.js";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import moment from "moment";
+import WorkoutTemplateEditModal from "./WorkoutTemplateEditModal.jsx";
 
 const WorkoutTemplateCard = ({ workout }) => {
+    const editModalRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [deleteTemplate] = useDeleteWorkoutMutation();
@@ -66,7 +69,13 @@ const WorkoutTemplateCard = ({ workout }) => {
                                 </a>
                             </li>
                             <li>
-                                <a>Edit</a>
+                                <a
+                                    onClick={() =>
+                                        editModalRef.current.showModal()
+                                    }
+                                >
+                                    Edit
+                                </a>
                             </li>
                             <li>
                                 <a
@@ -96,6 +105,10 @@ const WorkoutTemplateCard = ({ workout }) => {
                             </h5>
                         ))}
                 </div>
+                <WorkoutTemplateEditModal
+                    template={workout}
+                    modalRef={editModalRef}
+                />
             </div>
         </div>
     );

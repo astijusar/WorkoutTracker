@@ -16,7 +16,7 @@ const WorkoutTemplate = () => {
         data: { data: templates, pagination } = {},
         isLoading,
         isError,
-    } = useGetWorkoutsQuery({ pageNumber: page, template: true });
+    } = useGetWorkoutsQuery({ pageNumber: page, pageSize: 50, template: true });
 
     const onNewTemplateClicked = () => {
         if (isLoading || isError) return;

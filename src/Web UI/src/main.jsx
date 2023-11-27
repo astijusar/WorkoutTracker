@@ -60,7 +60,7 @@ const router = createBrowserRouter([
                         element: <CreateWorkout />,
                     },
                     {
-                        path: "create-template",
+                        path: "create-template/:id?",
                         element: <CreateWorkoutTempalte />,
                     },
                     {
