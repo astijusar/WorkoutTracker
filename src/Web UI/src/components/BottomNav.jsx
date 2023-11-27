@@ -48,7 +48,7 @@ const BottomNav = () => {
             </button>
             <button
                 className={`${
-                    location.pathname.slice(1) === "start-workout"
+                    location.pathname.slice(1) === "workout-template"
                         ? "active"
                         : ""
                 } bg-neutral`}

@@ -10,7 +10,7 @@ const AddWorkoutExerciseModal = ({ modalRef }) => {
         data: { data: exercises, pagination } = {},
         isLoading,
         isFetching,
-    } = useGetExercisesQuery({ pageNumber: page });
+    } = useGetExercisesQuery({ pageNumber: page, pageSize: 50 });
 
     return (
         <dialog ref={modalRef} className="modal" id="addExerciseModal">
