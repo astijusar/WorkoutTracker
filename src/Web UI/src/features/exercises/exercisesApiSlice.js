@@ -26,7 +26,10 @@ const exercisesApiSlice = apiSlice.injectEndpoints({
                     url: `/exercise/${exerciseId}`,
                 };
             },
-            providesTags: (result, error, id) => [{ type: "Exercise", id: id }],
+            providesTags: (result, error, id) => [
+                { type: "Exercise", id: id },
+                { type: "Exercise", id: "PARTIAL-LIST" },
+            ],
         }),
         addNewExercise: builder.mutation({
             query: (exercise) => ({
