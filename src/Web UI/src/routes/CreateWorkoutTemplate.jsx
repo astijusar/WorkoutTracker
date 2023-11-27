@@ -1,27 +1,25 @@
 import AddWorkoutExerciseModal from "../features/workouts/AddWorkoutExerciseModal";
 import WorkoutExercise from "../features/workoutExercises/WorkoutExercise";
-import Stopwatch from "../features/workouts/Stopwatch";
-import { useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
 import {
     selectWorkout,
     updateWorkout,
 } from "../features/workouts/workoutSlice";
 import {
-    useAddNewWorkoutMutation,
+    useAddNewWorkoutTemplateMutation,
     useAddNewWorkoutExercisesMutation,
 } from "../features/workouts/workoutsApiSlice";
-import moment from "moment";
+import { useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-const Workout = () => {
-    const dispatch = useDispatch();
-    const workout = useSelector(selectWorkout);
+const CreateWorkoutTempalte = () => {
     const exerciseListmodalRef = useRef(null);
+    const workout = useSelector(selectWorkout);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [addNewWorkout, { isLoading: isAddWorkoutLoading }] =
-        useAddNewWorkoutMutation();
+        useAddNewWorkoutTemplateMutation();
     const [addNewWorkoutExercises, { isLoading: isAddWorkoutExerciseLoading }] =
         useAddNewWorkoutExercisesMutation();
 
@@ -33,16 +31,18 @@ const Workout = () => {
         !workout.exercises.some((ex) => ex.errors);
 
     useEffect(() => {
-        if (workout.start === null) {
-            const updatedWorkout = {
-                ...workout,
-                start: moment().format(),
-            };
-            dispatch(updateWorkout(updatedWorkout));
-        }
+        const updatedWorkout = {
+            name: "New Template",
+            note: "",
+            start: null,
+            end: null,
+            isTemplate: true,
+            exercises: [],
+        };
+        dispatch(updateWorkout(updatedWorkout));
     }, []);
 
-    const onWorkoutCancel = () => {
+    const onCancel = () => {
         const freshWorkout = {
             name: "New workout",
             note: "",
@@ -75,12 +75,8 @@ const Workout = () => {
         dispatch(updateWorkout(updatedWorkout));
     };
 
-    const onFinishClicked = async () => {
-        if (
-            workout.exercises.length !== 0 &&
-            workout.exercises.filter((ex) => ex.sets.some((set) => set.done))
-                .length !== 0
-        ) {
+    const onTemplateSave = async () => {
+        if (workout.exercises.length !== 0) {
             try {
                 const result = await addNewWorkout(workout).unwrap();
 
@@ -88,19 +84,19 @@ const Workout = () => {
                     await addNewWorkoutExercises({
                         workoutId: result.id,
                         exercises: workout.exercises,
+                        isTemplate: true,
                     }).unwrap();
-                    onWorkoutCancel();
+                    onCancel();
                 } catch (err) {
                     console.error(
-                        "Failed to create new workout exercises",
-                        err
+                        "Failed to create new workout template exercises"
                     );
                 }
             } catch (err) {
-                console.error("Failed to create new workout", err);
+                console.error("Failed to create new workout template");
             }
         } else {
-            onWorkoutCancel();
+            onCancel();
         }
     };
 
@@ -115,17 +111,14 @@ const Workout = () => {
                 />
                 <button
                     className="btn btn-sm btn-secondary tracking-wider disabled:border-secondary disabled:text-slate-400"
-                    onClick={() => onFinishClicked()}
+                    onClick={() => onTemplateSave()}
                     disabled={!canSubmit}
                 >
-                    FINISH{" "}
+                    SAVE{" "}
                     {isLoading && (
                         <span className="loading loading-spinner loading-sm"></span>
                     )}
                 </button>
-            </div>
-            <div className="mt-2 text-lg font-semibold">
-                <Stopwatch start={workout.start} />
             </div>
             <input
                 type="text"
@@ -147,13 +140,13 @@ const Workout = () => {
             </button>
             <button
                 className="btn btn-error mt-4 w-full hover:bg-red-500 tracking-wider"
-                onClick={() => onWorkoutCancel()}
+                onClick={() => onCancel()}
             >
-                CANCEL WORKOUT
+                CANCEL CREATION
             </button>
             <AddWorkoutExerciseModal modalRef={exerciseListmodalRef} />
         </div>
     );
 };
 
-export default Workout;
+export default CreateWorkoutTempalte;

@@ -10,33 +10,55 @@ const History = () => {
     const {
         data: { data: workouts, pagination } = {},
         isLoading,
-        isFetching,
-    } = useGetWorkoutsQuery({ pageNumber: page, template: false });
+        isError,
+    } = useGetWorkoutsQuery({
+        pageNumber: page,
+        pageSize: 50,
+        template: false,
+    });
 
-    const content =
-        workouts && workouts.length !== 0 ? (
-            <>
-                <div className="mt-7 flex justify-between">
-                    <h5 className="text-sm text-gray-400 tracking-widest">
-                        {moment(workouts[0].end).format("MMMM").toUpperCase()}
+    const Content = () => {
+        if (isError) {
+            return (
+                <div className="mt-10">
+                    <h5 className="text-3xl font-medium text-center">
+                        Could not reach the server!
                     </h5>
-                    <h5 className="text-sm text-gray-400">
-                        {pagination.totalCount}{" "}
-                        {pagination.totalCount === 1 ? "workout" : "workouts"}
-                    </h5>
+                    <p className="mt-2 text-center text-xl">Try again later!</p>
                 </div>
-                <WorkoutHistoryList workouts={workouts} />
-            </>
-        ) : (
-            <h1 className="mt-10 text-3xl font-medium text-center">
-                No workouts completed!
-            </h1>
-        );
+            );
+        } else if (workouts && workouts.length !== 0) {
+            return (
+                <>
+                    <div className="mt-7 flex justify-between">
+                        <h5 className="text-sm text-gray-400 tracking-widest">
+                            {moment(workouts[0].end)
+                                .format("MMMM")
+                                .toUpperCase()}
+                        </h5>
+                        <h5 className="text-sm text-gray-400">
+                            {pagination.totalCount}{" "}
+                            {pagination.totalCount === 1
+                                ? "workout"
+                                : "workouts"}
+                        </h5>
+                    </div>
+                    <WorkoutHistoryList workouts={workouts} />
+                </>
+            );
+        } else {
+            return (
+                <h1 className="mt-10 text-3xl font-medium text-center">
+                    No workouts completed!
+                </h1>
+            );
+        }
+    };
 
     return (
         <div className="mx-5">
             <h1 className="mt-5 text-5xl font-semibold">History</h1>
-            {isLoading || isFetching ? <CenterSpinner /> : content}
+            {isLoading ? <CenterSpinner /> : <Content />}
         </div>
     );
 };

@@ -1,4 +1,48 @@
+import { useDeleteWorkoutMutation } from "./workoutsApiSlice.js";
+import { updateWorkout } from "./workoutSlice.js";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import moment from "moment";
+import WorkoutTemplateEditModal from "./WorkoutTemplateEditModal.jsx";
+
 const WorkoutTemplateCard = ({ workout }) => {
+    const editModalRef = useRef(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [deleteTemplate] = useDeleteWorkoutMutation();
+
+    const onDeleteClicked = async () => {
+        try {
+            await deleteTemplate({ id: workout.id }).unwrap();
+        } catch (err) {
+            console.error("Failed to delete the workout template");
+        }
+    };
+
+    const onPerformClicked = () => {
+        const workoutToPerform = {
+            name: workout.name,
+            note: workout.note,
+            start: moment().format(),
+            end: null,
+            isTemplate: false,
+            exercises: workout.workoutExercises.map((exercise, index) => ({
+                id: index + 1,
+                exerciseId: exercise.exercise.id,
+                name: exercise.exercise.name,
+                sets: exercise.sets.map((set) => ({
+                    reps: set.reps,
+                    weight: set.weight,
+                    done: set.done,
+                })),
+                errors: false,
+            })),
+        };
+        dispatch(updateWorkout(workoutToPerform));
+        navigate(`/create-workout`);
+    };
+
     return (
         <div className="card border border-gray-400">
             <div className="card-body p-3">
@@ -20,24 +64,51 @@ const WorkoutTemplateCard = ({ workout }) => {
                             className="dropdown-content z-[1] menu p-2 shadow bg-neutral border border-gray-400 rounded-lg w-40 font-semibold"
                         >
                             <li>
-                                <a>Edit</a>
+                                <a onClick={() => onPerformClicked()}>
+                                    Perform
+                                </a>
                             </li>
                             <li>
-                                <a>Delete</a>
+                                <a
+                                    onClick={() =>
+                                        editModalRef.current.showModal()
+                                    }
+                                >
+                                    Edit
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    className="text-error"
+                                    onClick={() => onDeleteClicked()}
+                                >
+                                    Delete
+                                </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <h5 className="text-sm text-gray-400">
-                    Last performed: 2 days ago
-                </h5>
                 <div className="leading-none">
-                    {workout.workoutExercises.map((exercise) => (
-                        <h5 key={exercise.id} className="text-sm text-gray-400">
-                            {`${exercise.sets.length} x ${exercise.exercise.name}`}
-                        </h5>
-                    ))}
+                    {workout.workoutExercises
+                        .map((exercise) => ({
+                            ...exercise,
+                            sets: [...exercise.sets].sort(
+                                (a, b) => a.order - b.order
+                            ),
+                        }))
+                        .map((exercise) => (
+                            <h5
+                                key={exercise.id}
+                                className="text-sm text-gray-400"
+                            >
+                                {`${exercise.sets.length} x ${exercise.exercise.name}`}
+                            </h5>
+                        ))}
                 </div>
+                <WorkoutTemplateEditModal
+                    template={workout}
+                    modalRef={editModalRef}
+                />
             </div>
         </div>
     );

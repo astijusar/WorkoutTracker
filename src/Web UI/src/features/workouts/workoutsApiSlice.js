@@ -37,18 +37,52 @@ const workoutApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [{ type: "Workout", id: "PARTIAL-LIST" }],
         }),
+        addNewWorkoutTemplate: builder.mutation({
+            query: (initialWorkout) => ({
+                url: "/workout",
+                method: "POST",
+                body: {
+                    name: initialWorkout.name
+                        ? initialWorkout.name
+                        : "New Template",
+                    note: initialWorkout.note,
+                    start: null,
+                    end: null,
+                    isTemplate: true,
+                },
+            }),
+            invalidatesTags: [{ type: "Workout", id: "PARTIAL-LIST" }],
+        }),
+        updateWorkoutTemplate: builder.mutation({
+            query: ({ templateId, updatedTemplate }) => ({
+                url: `/workout/${templateId}`,
+                method: "PUT",
+                body: {
+                    name: updatedTemplate.name
+                        ? updatedTemplate.name
+                        : "New Template",
+                    note: updatedTemplate.note,
+                    start: null,
+                    end: null,
+                    isTemplate: true,
+                },
+            }),
+            invalidatesTags: [{ type: "Workout", id: "PARTIAL-LIST" }],
+        }),
         addNewWorkoutExercises: builder.mutation({
             query: (request) => {
                 const body = request.exercises.map((exercise) => ({
                     exerciseId: exercise.exerciseId,
-                    sets: exercise.sets
-                        .filter((set) => set.done)
-                        .map((set) => ({
-                            reps: set.reps,
-                            weight: set.weight,
-                            done: set.done,
-                            measurementType: 1,
-                        })),
+                    sets: request.isTemplate
+                        ? exercise.sets
+                        : exercise.sets
+                              .filter((set) => set.done)
+                              .map((set) => ({
+                                  reps: set.reps,
+                                  weight: set.weight,
+                                  done: set.done,
+                                  measurementType: 1,
+                              })),
                 }));
 
                 return {
@@ -59,11 +93,46 @@ const workoutApiSlice = apiSlice.injectEndpoints({
             },
             invalidatesTags: [{ type: "Workout", id: "PARTIAL-LIST" }],
         }),
+        deleteWorkout: builder.mutation({
+            query: ({ id }) => ({
+                url: `workout/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: (result, error, id) => [
+                { type: "Workout", id },
+                { type: "Workout", id: "PARTIAL-LIST" },
+            ],
+            onQueryStarted: async ({ id }, { dispatch, queryFulfilled }) => {
+                const deleteResult = dispatch(
+                    workoutApiSlice.util.updateQueryData(
+                        "getWorkouts",
+                        null,
+                        (draft) => {
+                            const index = draft.data.findIndex(
+                                (workout) => workout.id === id
+                            );
+                            if (index !== -1) {
+                                draft.data.splice(index, 1);
+                            }
+                        }
+                    )
+                );
+
+                try {
+                    await queryFulfilled;
+                } catch {
+                    deleteResult.undo();
+                }
+            },
+        }),
     }),
 });
 
 export const {
     useGetWorkoutsQuery,
     useAddNewWorkoutMutation,
+    useAddNewWorkoutTemplateMutation,
     useAddNewWorkoutExercisesMutation,
+    useDeleteWorkoutMutation,
+    useUpdateWorkoutTemplateMutation,
 } = workoutApiSlice;

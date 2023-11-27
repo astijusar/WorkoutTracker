@@ -36,7 +36,7 @@ namespace Core.Services
             (
                 issuer: _issuer,
                 audience: _audience,
-                expires: DateTime.UtcNow.AddMinutes(10),
+                expires: DateTime.UtcNow.AddMinutes(15),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(_authSigningKey, SecurityAlgorithms.HmacSha256)
             );
