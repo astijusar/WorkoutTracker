@@ -17,7 +17,7 @@ namespace Core.Models
 
 
         [Column(TypeName = "decimal(18, 2)")]
-        [Range(1, 100000, ErrorMessage = "Weight is a required field and it needs to be between 1 and 100000.")]
+        [Range(0.01, 100000, ErrorMessage = "Weight is a required field and it needs to be between 0.01 and 100000.")]
         public decimal Weight { get; set; }
 
 

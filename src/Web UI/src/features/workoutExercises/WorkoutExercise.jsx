@@ -1,13 +1,12 @@
 import { useDispatch } from "react-redux";
 import { removeExercise, updateExercise } from "../workouts/workoutSlice";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 const WorkoutExercise = ({ exercise }) => {
     const [weightError, setWeightError] = useState(null);
     const [repsError, setRepsError] = useState(null);
 
     const dispatch = useDispatch();
-    const deletionWarningModalRef = useRef(null);
 
     const onDelete = () => {
         dispatch(removeExercise({ id: exercise.id }));
@@ -17,7 +16,11 @@ const WorkoutExercise = ({ exercise }) => {
         const newWeight = e.target.value;
 
         let parsedWeight = parseFloat(newWeight);
-        if (!isNaN(parsedWeight) && parsedWeight >= 0 && parsedWeight <= 1000) {
+        if (
+            !isNaN(parsedWeight) &&
+            parsedWeight >= 0.01 &&
+            parsedWeight <= 1000
+        ) {
             setWeightError(null);
             const updatedExercise = {
                 ...exercise,
@@ -28,7 +31,9 @@ const WorkoutExercise = ({ exercise }) => {
             };
             dispatch(updateExercise(updatedExercise));
         } else {
-            setWeightError("Weight must be a valid number between 0 and 1000");
+            setWeightError(
+                "Weight must be a valid number between 0.01 and 1000"
+            );
             const updatedExercise = {
                 ...exercise,
                 sets: exercise.sets.map((set, i) =>
@@ -44,7 +49,7 @@ const WorkoutExercise = ({ exercise }) => {
         const newReps = e.target.value;
 
         let parsedReps = parseInt(newReps);
-        if (!isNaN(parsedReps) && parsedReps >= 0 && parsedReps <= 1000) {
+        if (!isNaN(parsedReps) && parsedReps >= 1 && parsedReps <= 1000) {
             setRepsError(null);
             const updatedExercise = {
                 ...exercise,
@@ -55,7 +60,7 @@ const WorkoutExercise = ({ exercise }) => {
             };
             dispatch(updateExercise(updatedExercise));
         } else {
-            setRepsError("Reps must be a valid number between 0 and 1000");
+            setRepsError("Reps must be a valid number between 1 and 1000");
             const updatedExercise = {
                 ...exercise,
                 sets: exercise.sets.map((set, i) =>
@@ -82,7 +87,7 @@ const WorkoutExercise = ({ exercise }) => {
         const lastSet = exercise.sets[exercise.sets.length - 1];
         const newSet = lastSet
             ? { reps: lastSet.reps, weight: lastSet.weight, done: false }
-            : { reps: 0, weight: 0, done: false };
+            : { reps: 1, weight: 1, done: false };
 
         const updatedExercise = {
             ...exercise,

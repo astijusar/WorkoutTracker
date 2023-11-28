@@ -29,7 +29,7 @@ const workoutSlice = createSlice({
                 id: id,
                 exerciseId: exerciseId,
                 name: name,
-                sets: [{ reps: 0, weight: 0, done: false }],
+                sets: [{ reps: 1, weight: 1, done: false }],
                 errors: false,
             });
         },
