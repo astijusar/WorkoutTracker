@@ -22,10 +22,11 @@ namespace API.IntegrationTests
                 if (descriptor != null)
                     services.Remove(descriptor);
 
+                var connectionString = "Host=localhost;Port=5432;Database=WorkoutTrackerDb;Username=postgres;Password=password";
 
                 services.AddDbContext<ApplicationContext>(options =>
                 {
-                    //options.UseSqlServer("Server=127.0.0.1\\mssqltest,1433;Database=WorkoutTrackerDB;User=sa;Password=/Password12;TrustServerCertificate=Yes");
+                    options.UseNpgsql(connectionString);
                 });
 
                 var sp = services.BuildServiceProvider();
