@@ -36,9 +36,10 @@ const Login = () => {
             dispatch(setCredentials({ ...userData, user: data.username }));
             navigate("/profile");
         } catch (err) {
+            console.log(err);
             if (!err?.response && err?.status === "FETCH_ERROR") {
                 setApiError("Unable to reach server. Please try again later!");
-            } else if (err.response?.status === 400) {
+            } else if (err.originalStatus === 400) {
                 setError("username", {
                     type: "manual",
                     message: "Username is required!",
@@ -47,7 +48,7 @@ const Login = () => {
                     type: "manual",
                     message: "Password is required!",
                 });
-            } else if (err.response?.status === 401) {
+            } else if (err.originalStatus === 401) {
                 setApiError("Username or password is incorrect!");
             } else {
                 setApiError("Please try again later!");
