@@ -12,7 +12,7 @@ namespace Data.Repository.Seeders
         {
             new Exercise
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("e43f505f-abb1-491d-a75b-cc0dad3d998d"),
                 Name = "Bench press",
                 MuscleGroup = MuscleGroup.Chest,
                 EquipmentType = Equipment.Barbell,

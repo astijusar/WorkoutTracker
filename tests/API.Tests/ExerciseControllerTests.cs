@@ -49,11 +49,11 @@ namespace API.IntegrationTests
             var resultObj = await response.Content.ReadAsAsync<OffsetPaginationResponse<ExerciseDto>>();
 
             response.IsSuccessStatusCode.Should().BeTrue();
-            resultObj.Data.Count().Should().Be(9);
+            resultObj.Data.Count().Should().Be(10);
             resultObj.Pagination.PageNumber.Should().Be(1);
-            resultObj.Pagination.TotalPages.Should().Be(1);
+            resultObj.Pagination.TotalPages.Should().Be(2);
             resultObj.Pagination.HasPrevious.Should().BeFalse();
-            resultObj.Pagination.HasNext.Should().BeFalse();
+            resultObj.Pagination.HasNext.Should().BeTrue();
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace API.IntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        /*[Fact]
+        [Fact]
         public async Task POST_CreateExercise_ValidRequiredParameters_ReturnsCreated()
         {
             var requestBody = new ExerciseCreationDto("Test",  "Lorem Ipsum", "chest", "cable");
@@ -105,6 +105,67 @@ namespace API.IntegrationTests
             var response = await _client.PostAsync("/api/Exercise", content);
 
             response.StatusCode.Should().Be(HttpStatusCode.Created);
-        }*/
+        }
+
+        [Fact]
+        public async Task POST_CreateExercise_EmptyBody_ReturnsBadRequest()
+        {
+            var content = new StringContent("", Encoding.UTF8, "application/json");
+
+            var response = await _client.PostAsync("/api/Exercise", content);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task PUT_UpdateExercise_ValidRequiredParameters_ReturnsNoContent()
+        {
+            var requestBody = new ExerciseCreationDto("Bench press", "Lorem Ipsum", "chest", "barbell");
+            var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8,
+                "application/json");
+
+            var response = await _client.PutAsync("/api/Exercise/e43f505f-abb1-491d-a75b-cc0dad3d998d", content);
+
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+
+        [Fact]
+        public async Task PUT_UpdateExercise_ExerciseIdDoesNotExist_ReturnsNotFound()
+        {
+            var requestBody = new ExerciseCreationDto("Bench press", "Lorem Ipsum", "chest", "barbell");
+            var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8,
+                "application/json");
+
+            var response = await _client.PutAsync("/api/Exercise/e43f505f-abb1-491d-a75b-cc0dad3d997d", content);
+
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task PUT_UpdateExercise_EmptyBody_ReturnsBadRequest()
+        {
+            var content = new StringContent("", Encoding.UTF8,
+                "application/json");
+
+            var response = await _client.PutAsync("/api/Exercise/e43f505f-abb1-491d-a75b-cc0dad3d998d", content);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task DELETE_DeleteExercise_ValidRequiredParameters_ReturnsNoContent()
+        {
+            var response = await _client.DeleteAsync("/api/Exercise/e43f505f-abb1-491d-a75b-cc0dad3d998d");
+
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+
+        [Fact]
+        public async Task DELETE_DeleteExercise_ExerciseIdDoesNotExist_ReturnsNotFound()
+        {
+            var response = await _client.DeleteAsync("/api/Exercise/e43f505f-abb1-491d-a75b-cc0dad3d997d");
+
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
     }
 }
