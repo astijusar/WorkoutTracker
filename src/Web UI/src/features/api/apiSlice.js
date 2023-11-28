@@ -20,13 +20,17 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
 
     if (result?.error?.originalStatus === 401) {
-        const refreshToken = getState().auth.refreshToken;
+        const refreshToken = api.getState().auth.refreshToken;
 
-        const refreshResult = await baseQuery("/auth/refresh", api, {
-            ...extraOptions,
-            method: "POST",
-            body: JSON.stringify({ refreshToken }),
-        });
+        const refreshResult = await baseQuery(
+            {
+                url: "/auth/refresh",
+                method: "POST",
+                body: JSON.stringify({ refreshToken: refreshToken }),
+            },
+            api,
+            extraOptions
+        );
 
         console.log(refreshResult);
 
