@@ -33,10 +33,11 @@ const Register = () => {
                 email: data.email,
             }).unwrap();
             navigate("/login");
-        } catch {
+        } catch (err) {
+            console.log(err);
             if (!err?.response && err?.status === "FETCH_ERROR") {
                 setApiError("Unable to reach server. Please try again later!");
-            } else if (err.response?.status === 400) {
+            } else if (err.status === 400) {
                 setError("username", {
                     type: "manual",
                     message: "Username is required!",
@@ -48,6 +49,11 @@ const Register = () => {
                 setError("password", {
                     type: "manual",
                     message: "Password is required!",
+                });
+            } else if (err.status === 422) {
+                setError("username", {
+                    type: "manual",
+                    message: "Username is already taken!",
                 });
             } else {
                 setApiError("Please try again later!");
@@ -128,6 +134,11 @@ const Register = () => {
                             <input
                                 {...register("password", {
                                     required: true,
+                                    pattern: {
+                                        value: /^(?=.*\d)(?=.*[/!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,}$/,
+                                        message:
+                                            "Password needs to be atleast 6 letters long and have atleast one capital letter, number and special character!",
+                                    },
                                 })}
                                 className="input w-full mb-1"
                                 type="password"
