@@ -25,6 +25,12 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get all exercises for a specific workout
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <returns>A list of all exercises for the workout</returns>
+        /// <response code="200">Returns a list of all exercises for the workout</response>
         [HttpGet]
         [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
         public IActionResult GetExercises(Guid workoutId)
@@ -38,6 +44,14 @@ namespace API.Controllers
             return Ok(exercisesDto);
         }
 
+        /// <summary>
+        /// Get a specific exercise for a workout by id
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <returns>The exercise for the workout</returns>
+        /// <response code="200">Returns the exercise for the workout</response>
+        /// <response code="404">Exercise not found</response>
         [HttpGet("{exerciseId:guid}", Name = "GetWorkoutExercise")]
         [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
         public IActionResult GetExercise(Guid workoutId, Guid exerciseId)
@@ -56,6 +70,14 @@ namespace API.Controllers
             return Ok(exerciseDto);
         }
 
+        /// <summary>
+        /// Create a new exercise for a workout
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="input">Exercise creation object</param>
+        /// <returns>The newly created exercise</returns>
+        /// <response code="201">Returns the newly created exercise</response>
+        /// <response code="400">Exercise creation object is null</response>
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
@@ -72,6 +94,14 @@ namespace API.Controllers
             return CreatedAtRoute("GetWorkoutExercise", new { workoutId, exerciseId = exerciseDto.Id }, exerciseDto);
         }
 
+        /// <summary>
+        /// Create a collection of exercises for a workout
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="input">Exercise creation objects</param>
+        /// <returns>The created exercises</returns>
+        /// <response code="201">Returns the created exercises</response>
+        /// <response code="400">Exercise creation objects are null</response>
         [HttpPost("collection")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
@@ -88,6 +118,16 @@ namespace API.Controllers
             return CreatedAtAction("CreateExerciseCollection", exercisesDto);
         }
 
+        /// <summary>
+        /// Update an exercise for a workout by id
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <param name="input">Exercise update object</param>
+        /// <returns>No content response</returns>
+        /// <response code="204">No content response</response>
+        /// <response code="400">Exercise update object is null</response>
+        /// <response code="404">Exercise not found</response>
         [HttpPut("{exerciseId}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
@@ -102,6 +142,14 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Delete an exercise for a workout by id
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <returns>No content response</returns>
+        /// <response code="204">No content response</response>
+        /// <response code="404">Exercise not found</response>
         [HttpDelete("{exerciseId:guid}")]
         [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
         public async Task<IActionResult> DeleteExercise(Guid workoutId, Guid exerciseId)

@@ -23,6 +23,14 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get all exercise sets for a specific exercise
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <returns>A list of exercise sets</returns>
+        /// <response code="200">Returns a list of exercise sets</response>
+        /// <response code="404">Exercise or workout does not exist</response>
         [HttpGet]
         [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
         public IActionResult GetExerciseSets(Guid workoutId, Guid exerciseId)
@@ -35,6 +43,15 @@ namespace API.Controllers
             return Ok(exerciseSetsDto);
         }
 
+        /// <summary>
+        /// Get a specific exercise set
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <param name="setId">Exercise set id</param>
+        /// <returns>An exercise set</returns>
+        /// <response code="200">Returns an exercise set</response>
+        /// <response code="404">Exercise set, exercise, or workout does not exist</response>
         [HttpGet("{setId:guid}", Name = "GetExerciseSet")]
         [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
         public IActionResult GetExerciseSet(Guid workoutId, Guid exerciseId, Guid setId)
@@ -52,6 +69,16 @@ namespace API.Controllers
             return Ok(exerciseSetDto);
         }
 
+        /// <summary>
+        /// Create a new exercise set
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <param name="input">Exercise set creation object</param>
+        /// <returns>A newly created exercise set</returns>
+        /// <response code="201">Returns a newly created exercise set</response>
+        /// <response code="400">Exercise set creation object sent from client is null</response>
+        /// <response code="422">Invalid model state for the exercise set creation object</response>
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
@@ -68,6 +95,18 @@ namespace API.Controllers
             return CreatedAtRoute("GetExerciseSet", new { workoutId, exerciseId, setId = exerciseSetDto.Id }, exerciseSetDto);
         }
 
+        /// <summary>
+        /// Update an exercise set
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <param name="setId">Exercise set id</param>
+        /// <param name="input">Exercise set update object</param>
+        /// <returns>204 no content response</returns>
+        /// <response code="204">No content response</response>
+        /// <response code="400">Exercise set update object is null</response>
+        /// <response code="422">Invalid model state for the exercise set update object</response>
+        /// <response code="404">Exercise set, exercise, or workout is not found</response>
         [HttpPut("{setId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
@@ -88,7 +127,15 @@ namespace API.Controllers
             return NoContent();
         }
 
-
+        /// <summary>
+        /// Delete an exercise set
+        /// </summary>
+        /// <param name="workoutId">Workout id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <param name="setId">Exercise set id</param>
+        /// <returns>204 no content response</returns>
+        /// <response code="204">No content response</response>
+        /// <response code="404">Exercise set, exercise, or workout is not found</response>
         [HttpDelete("{setId:guid}")]
         [ServiceFilter(typeof(WorkoutExerciseExistsFilterAttribute))]
         public async Task<IActionResult> DeleteExerciseSet(Guid workoutId, Guid exerciseId, Guid setId)

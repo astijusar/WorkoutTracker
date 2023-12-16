@@ -26,6 +26,13 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// User login
+        /// </summary>
+        /// <param name="loginDto">User login object</param>
+        /// <returns>Access and refresh tokens</returns>
+        /// <response code="200">Returns access and refresh tokens</response>
+        /// <response code="401">Unauthorized, username or password is incorrect</response>
         [HttpPost("login")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Login([FromBody] UserLoginDto loginDto)
@@ -55,6 +62,13 @@ namespace API.Controllers
             return Ok(new SuccessfulLoginDto(accessToken, refreshToken));
         }
 
+        /// <summary>
+        /// User registration
+        /// </summary>
+        /// <param name="registrationDto">User registration object</param>
+        /// <returns>User object</returns>
+        /// <response code="201">Returns the newly created user</response>
+        /// <response code="422">User name already taken</response>
         [HttpPost("register")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDto registrationDto)
@@ -82,6 +96,13 @@ namespace API.Controllers
             return CreatedAtAction(nameof(Login), userDto);
         }
 
+        /// <summary>
+        /// Get access token
+        /// </summary>
+        /// <param name="refreshAccessTokenDto">Refresh access token object</param>
+        /// <returns>Access and refresh tokens</returns>
+        /// <response code="200">Returns access and refresh tokens</response>
+        /// <response code="422">Invalid token</response>
         [HttpPost("refresh")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> GetAccessToken([FromBody] RefreshAccessTokenDto refreshAccessTokenDto)
