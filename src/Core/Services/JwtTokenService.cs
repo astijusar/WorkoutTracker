@@ -64,7 +64,7 @@ namespace Core.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public bool TryParseRefreshToken(string refreshToken, out ClaimsPrincipal? claims)
+        public virtual bool TryParseRefreshToken(string refreshToken, out ClaimsPrincipal? claims)
         {
             claims = null;
 
