@@ -26,6 +26,11 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get all of the workouts
+        /// </summary>
+        /// <returns>A list of all workouts</returns>
+        /// <response code="200">Returns a list of all workouts</response>
         [HttpGet]
         [ServiceFilter(typeof(UserExistsFilterAttribute))]
         public async Task<IActionResult> GetWorkouts([FromQuery] WorkoutParameters parameters)
@@ -39,6 +44,13 @@ namespace API.Controllers
             return Ok(new OffsetPaginationResponse<WorkoutDto>(workoutsDto, workouts.Pagination));
         }
 
+        /// <summary>
+        /// Get a workout by id
+        /// </summary>
+        /// <param name="workoutId">Workout to return id</param>
+        /// <returns>A workout by id</returns>
+        /// <response code="200">Returns a workout by id</response>
+        /// <response code="404">Workout does not exist</response>
         [HttpGet("{workoutId:guid}", Name = "GetWorkout")]
         [ServiceFilter(typeof(UserExistsFilterAttribute))]
         public async Task<IActionResult> GetWorkout(Guid workoutId)
@@ -59,6 +71,14 @@ namespace API.Controllers
             return Ok(workoutDto);
         }
 
+        /// <summary>
+        /// Create a new workout
+        /// </summary>
+        /// <param name="input">Workout creation object</param>
+        /// <returns>A newly created workout</returns>
+        /// <response code="201">Returns a newly created workout</response>
+        /// <response code="400">Workout creation object sent from client is null</response>
+        /// <response code="422">Invalid model state for the workout creation object</response>
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(UserExistsFilterAttribute))]
@@ -78,6 +98,16 @@ namespace API.Controllers
             return CreatedAtRoute("GetWorkout", new { workoutId = workoutDto.Id }, workoutDto);
         }
 
+        /// <summary>
+        /// Update workout by id
+        /// </summary>
+        /// <param name="workoutId">Workout to be updated id</param>
+        /// <param name="input">Workout update object</param>
+        /// <returns>204 no content response</returns>
+        /// <response code="204">No content response</response>
+        /// <response code="400">Workout update object is null</response>
+        /// <response code="422">Invalid model state for the workout update object</response>
+        /// <response code="404">Workout is not found</response>
         [HttpPut("{workoutId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
@@ -91,6 +121,16 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Partially update workout by id
+        /// </summary>
+        /// <param name="workoutId">Workout to be updated id</param>
+        /// <param name="patchInput">Workout patch object</param>
+        /// <returns>204 no content response</returns>
+        /// <response code="204">No content response</response>
+        /// <response code="400">Workout patch object is null</response>
+        /// <response code="422">Invalid model state for the workout patch object</response>
+        /// <response code="404">Workout is not found</response>
         [HttpPatch("{workoutId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
@@ -124,6 +164,13 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Delete workout by id
+        /// </summary>
+        /// <param name="workoutId">Workout to be deleted id</param>
+        /// <returns>204 no context response</returns>
+        /// <response code="204">No content response</response>
+        /// <response code="404">Workout is not found</response>
         [HttpDelete("{workoutId:guid}")]
         [ServiceFilter(typeof(WorkoutForUserExistsFilterAttribute))]
         public async Task<IActionResult> DeleteWorkout(Guid workoutId)
