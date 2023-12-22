@@ -47,6 +47,42 @@ The image below shows the deployment diagram of the system. Heroku is used to ho
 
 # User interface
 
+### Profile:
+
+![Profile](https://github.com/astijusar/WorkoutTracker/assets/60033715/73064202-5696-4159-bc93-1afb2fafa5bd)
+
+### History:
+
+![History](https://github.com/astijusar/WorkoutTracker/assets/60033715/896a729f-2021-4427-b7e2-56fb980cad20)
+
+### Start workout:
+
+![Workout](https://github.com/astijusar/WorkoutTracker/assets/60033715/3e23634a-4909-4bb4-bb8f-9465e4eed279)
+
+### Exercises:
+
+![Exercises](https://github.com/astijusar/WorkoutTracker/assets/60033715/04932385-23a4-4859-966c-1e8a56357192)
+
+### Exercise info modal:
+
+![Exercise info](https://github.com/astijusar/WorkoutTracker/assets/60033715/0a5dfbdf-d349-413b-a680-df5b2906439b)
+
+### Workout creation:
+
+![Workout start](https://github.com/astijusar/WorkoutTracker/assets/60033715/3b28cde2-a457-49d0-85b5-81bf0e8e6794)
+
+### Add exercise to workout:
+
+![Add exercise](https://github.com/astijusar/WorkoutTracker/assets/60033715/9842fb70-15bc-455f-abe5-85f3bd5c0259)
+
+### Exercise creation:
+
+![Exercise creation](https://github.com/astijusar/WorkoutTracker/assets/60033715/e01cbc91-f3dc-490b-b2f6-4d51c1011ebb)
+
+### Exercise editing:
+
+![exercise editing](https://github.com/astijusar/WorkoutTracker/assets/60033715/816eb7a0-a1e6-40d1-9d9e-bc35b2d8cdb7)
+
 # API specification
 
 <h1 id="api-auth">Auth</h1>
