@@ -1,6 +1,53 @@
-# Workout tracker
+# Workout tracker app
 
-> Scroll down for code samples, example requests and responses
+# System description
+
+### Purpose of the system
+
+The project aims to allow users to plan their workouts and track their progress in the application.
+
+Once the user has signed up to the system, they can create their workouts by adding exercises to them. When a workout is performed, it is possible to fill in the results, i.e.: how many times the exercise has been performed and with which weight. It is also possible to view past workouts, create templates, and perform the workouts from them.
+
+System roles:
+
+ - Administrator - will be able to add and edit exercises.
+ - Regular user - can create, perform, delete, view templates and workouts.
+ - Premium user - can do everything a regular user can, but can create more than 3 templates.
+
+### Functional requirements
+
+ - Sign in to the app
+ - Log in to the app
+ - Log out of the app
+ - View exercises and their information
+ - Create a workout
+ - Add exercises to the workout
+ - Start the workout
+ - Finish the workout
+ - View workout history
+ - Perform workout again from history
+ - Create a workout template
+ - Perform a workout from the template
+ - Delete workout from history
+ - Delete template
+ - Edit template
+ - Add a new exercise
+ - Edit an exercise
+
+# System architecture
+
+System components:
+
+ - Client side (front-end) - using React.js.
+ - Server side (back-end) - using ASP .NET Core and PostgreSQL database
+
+The image below shows the deployment diagram of the system. Heroku is used to host both the API and the database. Vercel is used to host the front-end application. The web application and the API are accessed via the HTTPS protocol. The API stores data in the PostgreSQL database and performs data exchange using the ORM interface.
+
+![image](https://github.com/astijusar/WorkoutTracker/assets/60033715/78a120ab-e9a2-49e3-899d-bd11bd4ca6ce)
+
+# User interface
+
+# API specification
 
 <h1 id="api-auth">Auth</h1>
 
@@ -1910,4 +1957,5 @@ This operation does not require authentication
 |---|---|---|---|---|
 |name|string¦null|false|none|none|
 |note|string¦null|false|none|none|
+
 
